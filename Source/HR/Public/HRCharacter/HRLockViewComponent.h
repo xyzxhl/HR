@@ -20,7 +20,7 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 	
-	void EnemyCheck();
+
 
 public:	
 	// Called every frame
@@ -28,4 +28,5 @@ public:
 
 public:
 	bool bViewImport;
+	void EnemyCheck();
 };

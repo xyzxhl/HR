@@ -100,6 +100,9 @@ void AHRCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 
+	PlayerInputComponent->BindAction("PrimaryInteract", IE_Pressed, InteractionComp, &UHRInteractionComponent::PrimaryInteract);
+	PlayerInputComponent->BindAction("EnemyCheck", IE_Pressed, LockViewComp, &UHRLockViewComponent::EnemyCheck);
+
 	PlayerInputComponent->BindAxis("Move Forward / Backward", this, &AHRCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("Move Right / Left", this, &AHRCharacter::MoveRight);
 
