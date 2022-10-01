@@ -72,7 +72,7 @@ void UHRInteractionComponent::PrimaryInteract()
 			{
 				APawn* MyPawn = Cast<APawn>(MyOwner);
 
-				IHRInterface::Excute_Interact(HitActor, MyPawn);
+				IHRInterface::Execute_Interact(HitActor, MyPawn);
 				break;
 			}
 		}

@@ -24,5 +24,5 @@ class HR_API IHRInterface
 public:
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-	void Interact(APawn* InstigatorPawn);
+		void Interact(APawn* InstigatorPawn);
 };
