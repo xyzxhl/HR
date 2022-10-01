@@ -25,16 +25,23 @@ class HR_API AHRCharacter : public ACharacter
 	UPROPERTY(VisibleAnywhere)
 	class UHRInteractionComponent* InteractionComp;
 
+	bool isLockView;
+	AActor* ActorLockTo;
+public:
+	class APlayerController* ThisPlayerController;
+
 public:
 	// Sets default values for this character's properties
 	AHRCharacter();
 
 protected:
-	/** Called for forwards/backward input */
 	void MoveForward(float Value);
-
-	/** Called for side to side input */
 	void MoveRight(float Value);
+
+	void TurnRight(float Value);
+	void LookUp(float Value);
+
+	void LockViewToEnemy();
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

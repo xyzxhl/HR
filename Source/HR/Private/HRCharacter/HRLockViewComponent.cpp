@@ -34,7 +34,7 @@ void UHRLockViewComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 	// ...
 }
 
-void UHRLockViewComponent::EnemyCheck()
+AActor* UHRLockViewComponent::EnemyCheck()
 {
 	FCollisionObjectQueryParams ObjectQueryParams;
 	ObjectQueryParams.AddObjectTypesToQuery(ECC_WorldDynamic);
@@ -65,16 +65,14 @@ void UHRLockViewComponent::EnemyCheck()
 		AActor* HitActor = Hit.GetActor();
 		if (HitActor)
 		{
-			
+			DrawDebugLine(GetWorld(), EyeLocation, End, LineColor, false, 2.0f, 0, 2.0f);
 			if (HitActor->GetClass()->IsChildOf(AHREnemyPawn::StaticClass()))
 			{
 				DrawDebugSphere(GetWorld(), Hit.ImpactPoint, Radius, 32, LineColor, false, 2.0f);
-				
-				break;
+				return HitActor;
 			}
 		}
 	}
 
-	DrawDebugLine(GetWorld(), EyeLocation, End, LineColor, false, 2.0f, 0, 2.0f);
-
+	return nullptr;
 }
