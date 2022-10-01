@@ -32,3 +32,7 @@ void UHRLockViewComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 	// ...
 }
 
+void UHRLockViewComponent::EnemyCheck()
+{
+
+}

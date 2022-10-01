@@ -19,6 +19,12 @@ class HR_API AHRCharacter : public ACharacter
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* FollowCamera;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	class UHRLockViewComponent* LockViewComp;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	class UHRInteractionComponent* InteractionComp;
+
 public:
 	// Sets default values for this character's properties
 	AHRCharacter();
