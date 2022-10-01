@@ -14,4 +14,6 @@ class HR_API AHRGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
 	
+public:
+	AHRGameModeBase();
 };
