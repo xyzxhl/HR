@@ -95,7 +95,7 @@ void AHRCharacter::LockViewToEnemy()
 	else
 	{
 		ActorLockTo = LockViewComp->EnemyCheck();
-		if (ActorLockTo)
+		if (ensure(ActorLockTo))
 		{
 			isLockView = true;
 		}
@@ -120,15 +120,19 @@ void AHRCharacter::Tick(float DeltaTime)
 	{
 		FVector Location = GetActorLocation();
 		FVector TargetLotion = ActorLockTo->GetActorLocation();
+
 		FRotator TargetRotation = UKismetMathLibrary::FindLookAtRotation(Location, TargetLotion);
 		FRotator SelfRotation = GetControlRotation();
+
 		float tp = TargetRotation.Pitch, ty = TargetRotation.Yaw, sp = SelfRotation.Pitch, sy = SelfRotation.Yaw;
 		float PitchRotation = (((tp > sp) ^ (abs(tp - sp) > 180.0f)) ? 1.0f : -1.0f) *
 			(abs(tp - sp) > 180.0f ? 360.0f - abs(tp - sp) : abs(tp - sp));
 		float YawRotation = (((ty > sy) ^ (abs(ty - sy) > 180.0f)) ? 1.0f : -1.0f) *
 			(abs(ty - sy) > 180.0f ? 360.0f - abs(ty - sy) : abs(ty - sy));
+
 		AddControllerPitchInput(-PitchRotation * DeltaTime);
 		AddControllerYawInput(YawRotation * DeltaTime);
+
 		UE_LOG(LogTemp, Warning, TEXT ("%f %f"),TargetRotation.Pitch , SelfRotation.Pitch);
 	}
 }
