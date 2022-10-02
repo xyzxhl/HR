@@ -2,8 +2,11 @@
 
 
 #include "HRCharacter/HRLockViewComponent.h"
-#include "HRInterface.h"
+#include "HRCharacter\HRCharacter.h"
 #include "HRCreature/HREnemyPawn.h"
+#include "GameFramework/SpringArmComponent.h"
+#include "Kismet\GameplayStatics.h"
+#include "Kismet\KismetMathLibrary.h"
 
 // Sets default values for this component's properties
 UHRLockViewComponent::UHRLockViewComponent()
@@ -12,7 +15,8 @@ UHRLockViewComponent::UHRLockViewComponent()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 
-	// ...
+	ActorLockTo = nullptr;
+	isLockView = false;
 }
 
 
@@ -21,8 +25,10 @@ void UHRLockViewComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// ...
-	
+	OwnerCharacter = Cast<AHRCharacter>(GetOwner());
+
+	CurrentCamera = UGameplayStatics::GetPlayerController(this, 0)->PlayerCameraManager;
+	CurrentCamera->ViewPitchMax = 30.0f;
 }
 
 
@@ -31,7 +37,50 @@ void UHRLockViewComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	// ...
+	if (isLockView)
+	{
+		if (ActorLockTo) {
+			FVector Location = CurrentCamera->GetCameraLocation();
+			FVector TargetLotion = ActorLockTo->GetActorLocation();
+
+			FRotator TargetRotation = UKismetMathLibrary::FindLookAtRotation(Location, TargetLotion);
+			FRotator SelfRotation = OwnerCharacter->GetControlRotation();
+
+			float tp = TargetRotation.Pitch, ty = TargetRotation.Yaw, sp = SelfRotation.Pitch, sy = SelfRotation.Yaw;
+
+			if (tp > 30.0f) {
+				if (OwnerCharacter->CameraBoom->SocketOffset.Z < 200.0f) OwnerCharacter->CameraBoom->SocketOffset.Z += 300.0f * DeltaTime;
+				tp = 30.0f;
+			}
+			if (tp < 0.0f)
+				ResetCameraLocation(DeltaTime);
+
+			float PitchRotation = (((tp > sp) ^ (abs(tp - sp) > 180.0f)) ? 1.0f : -1.0f) *
+				(abs(tp - sp) > 180.0f ? 360.0f - abs(tp - sp) : abs(tp - sp));
+			float YawRotation = (((ty > sy) ^ (abs(ty - sy) > 180.0f)) ? 1.0f : -1.0f) *
+				(abs(ty - sy) > 180.0f ? 360.0f - abs(ty - sy) : abs(ty - sy));
+
+			OwnerCharacter->AddControllerPitchInput(-PitchRotation * DeltaTime * 10);
+			OwnerCharacter->AddControllerYawInput(YawRotation * DeltaTime * 10);
+		}
+		else {
+			ActorLockTo = EnemyCheck();
+			if (!ActorLockTo)
+			{
+				isLockView = false;
+			}
+		}
+	}
+	else
+		ResetCameraLocation(DeltaTime);
+}
+
+void UHRLockViewComponent::ResetCameraLocation(float DeltaTime)
+{
+	if (OwnerCharacter->CameraBoom->SocketOffset.Z > 0.1f)
+		OwnerCharacter->CameraBoom->SocketOffset.Z -= 300.0f * DeltaTime;
+	else
+		OwnerCharacter->CameraBoom->SocketOffset.Z = 0.0f;
 }
 
 AActor* UHRLockViewComponent::EnemyCheck()
@@ -39,12 +88,9 @@ AActor* UHRLockViewComponent::EnemyCheck()
 	FCollisionObjectQueryParams ObjectQueryParams;
 	ObjectQueryParams.AddObjectTypesToQuery(ECC_WorldDynamic);
 
-	AActor* MyOwner = GetOwner();
-
-
 	FVector EyeLocation;
 	FRotator EyeRotation;
-	MyOwner->GetActorEyesViewPoint(EyeLocation, EyeRotation);
+	OwnerCharacter->GetActorEyesViewPoint(EyeLocation, EyeRotation);
 
 	FVector End = EyeLocation + (EyeRotation.Vector() * 5000);
 

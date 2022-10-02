@@ -8,8 +8,6 @@
 #include "Components/InputComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
-#include "Kismet\GameplayStatics.h"
-#include "Kismet\KismetMathLibrary.h"
 #include "GameFramework/SpringArmComponent.h"
 
 // Sets default values
@@ -33,7 +31,8 @@ AHRCharacter::AHRCharacter()
 
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraBoom->SetupAttachment(RootComponent);
-	CameraBoom->TargetArmLength = 400.0f;
+	CameraBoom->TargetArmLength = 600.0f;
+	CameraBoom->SocketOffset.Z = 100.0f;
 	CameraBoom->bUsePawnControlRotation = true;
 
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
@@ -43,8 +42,6 @@ AHRCharacter::AHRCharacter()
 	InteractionComp = CreateDefaultSubobject<UHRInteractionComponent>(TEXT("InteractionComp"));
 
 	LockViewComp = CreateDefaultSubobject<UHRLockViewComponent>(TEXT("LockViewComp"));
-	isLockView = false;
-	ActorLockTo = nullptr;
 }
 
 void AHRCharacter::MoveForward(float Value)
@@ -71,7 +68,7 @@ void AHRCharacter::MoveRight(float Value)
 
 void AHRCharacter::TurnRight(float Value)
 {
-	if (!isLockView)
+	if (!LockViewComp->isLockView)
 	{
 		AddControllerYawInput(Value);
 	}
@@ -79,7 +76,7 @@ void AHRCharacter::TurnRight(float Value)
 
 void AHRCharacter::LookUp(float Value)
 {
-	if (!isLockView)
+	if (!LockViewComp->isLockView)
 	{
 		AddControllerPitchInput(Value);
 	}
@@ -87,19 +84,7 @@ void AHRCharacter::LookUp(float Value)
 
 void AHRCharacter::LockViewToEnemy()
 {
-	if (isLockView)
-	{
-		isLockView = false;
-		ActorLockTo = nullptr;
-	} 
-	else
-	{
-		ActorLockTo = LockViewComp->EnemyCheck();
-		if (ensure(ActorLockTo))
-		{
-			isLockView = true;
-		}
-	}
+	LockViewComp->isLockView = !LockViewComp->isLockView;
 }
 
 // Called when the game starts or when spawned
@@ -107,8 +92,6 @@ void AHRCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	ThisPlayerController = UGameplayStatics::GetPlayerController(this, 0);
-	ThisPlayerController->PlayerCameraManager->ViewPitchMax = 40;
 }
 
 // Called every frame
@@ -116,25 +99,6 @@ void AHRCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (isLockView && ActorLockTo)
-	{
-		FVector Location = GetActorLocation();
-		FVector TargetLotion = ActorLockTo->GetActorLocation();
-
-		FRotator TargetRotation = UKismetMathLibrary::FindLookAtRotation(Location, TargetLotion);
-		FRotator SelfRotation = GetControlRotation();
-
-		float tp = TargetRotation.Pitch, ty = TargetRotation.Yaw, sp = SelfRotation.Pitch, sy = SelfRotation.Yaw;
-		float PitchRotation = (((tp > sp) ^ (abs(tp - sp) > 180.0f)) ? 1.0f : -1.0f) *
-			(abs(tp - sp) > 180.0f ? 360.0f - abs(tp - sp) : abs(tp - sp));
-		float YawRotation = (((ty > sy) ^ (abs(ty - sy) > 180.0f)) ? 1.0f : -1.0f) *
-			(abs(ty - sy) > 180.0f ? 360.0f - abs(ty - sy) : abs(ty - sy));
-
-		AddControllerPitchInput(-PitchRotation * DeltaTime);
-		AddControllerYawInput(YawRotation * DeltaTime);
-
-		UE_LOG(LogTemp, Warning, TEXT ("%f %f"),TargetRotation.Pitch , SelfRotation.Pitch);
-	}
 }
 
 // Called to bind functionality to input

@@ -10,25 +10,19 @@ UCLASS()
 class HR_API AHRCharacter : public ACharacter
 {
 	GENERATED_BODY()
-
-	/** Camera boom positioning the camera behind the character */
+public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class USpringArmComponent* CameraBoom;
 
-	/** Follow camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* FollowCamera;
 
+protected:
 	UPROPERTY(VisibleAnywhere)
 	class UHRLockViewComponent* LockViewComp;
 
 	UPROPERTY(VisibleAnywhere)
 	class UHRInteractionComponent* InteractionComp;
-
-	bool isLockView;
-	AActor* ActorLockTo;
-public:
-	class APlayerController* ThisPlayerController;
 
 public:
 	// Sets default values for this character's properties
