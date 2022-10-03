@@ -1,14 +1,19 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "HRCharacter/HRCharacter.h"
 #include "HRCharacter/HRInteractionComponent.h"
 #include "HRCharacter/HRLockViewComponent.h"
+#include "HRAbility/HRAbilitySystemComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Components/InputComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
+
+UAbilitySystemComponent* AHRCharacter::GetAbilitySystemComponent() const
+{
+	return AbilitySystemComp;
+}
 
 // Sets default values
 AHRCharacter::AHRCharacter()
@@ -42,6 +47,8 @@ AHRCharacter::AHRCharacter()
 	InteractionComp = CreateDefaultSubobject<UHRInteractionComponent>(TEXT("InteractionComp"));
 
 	LockViewComp = CreateDefaultSubobject<UHRLockViewComponent>(TEXT("LockViewComp"));
+
+	AbilitySystemComp = CreateDefaultSubobject<UHRAbilitySystemComponent>(TEXT("AbilitySystem"));
 }
 
 void AHRCharacter::MoveForward(float Value)

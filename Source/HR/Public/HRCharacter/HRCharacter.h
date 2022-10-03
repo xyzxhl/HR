@@ -4,10 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "AbilitySystemInterface.h"
 #include "HRCharacter.generated.h"
 
 UCLASS()
-class HR_API AHRCharacter : public ACharacter
+class HR_API AHRCharacter : public ACharacter, public IAbilitySystemInterface
 {
 	GENERATED_BODY()
 public:
@@ -23,6 +24,12 @@ protected:
 
 	UPROPERTY(VisibleAnywhere)
 	class UHRInteractionComponent* InteractionComp;
+
+public:
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="CharacterBase")
+    class UHRAbilitySystemComponent* AbilitySystemComp;
+
+    virtual UAbilitySystemComponent* GetAbilitySystemComponent() const;
 
 public:
 	// Sets default values for this character's properties
