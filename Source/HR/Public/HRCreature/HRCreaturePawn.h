@@ -4,16 +4,26 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
+#include "AbilitySystemInterface.h"
 #include "HRCreaturePawn.generated.h"
 
 UCLASS()
-class HR_API AHRCreaturePawn : public APawn
+class HR_API AHRCreaturePawn : public APawn, public IAbilitySystemInterface
 {
 	GENERATED_BODY()
+public:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AbilitySystem")
+    class UHRAbilitySystemComponent* AbilitySystemComp;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AbilitySystem")
+	class UHRAttributeSet* AttributeSet;
 
 public:
 	// Sets default values for this pawn's properties
 	AHRCreaturePawn();
+	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const;
+	virtual void PossessedBy(AController* NewController) override;
+	virtual void OnRep_Controller() override;
 
 protected:
 	// Called when the game starts or when spawned

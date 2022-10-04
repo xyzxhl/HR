@@ -28,21 +28,21 @@ public:
 	FGameplayAttributeData Health;
 	ATTRIBUTE_ACCESSORS(UHRAttributeSet, Health);
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Ability", ReplicatedUsing = OnRep_MaxHealth)
-	FGameplayAttributeData MaxHealth;
-	ATTRIBUTE_ACCESSORS(UHRAttributeSet, MaxHealth);
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Ability", ReplicatedUsing = OnRep_Stamina)
 	FGameplayAttributeData Stamina;
 	ATTRIBUTE_ACCESSORS(UHRAttributeSet, Stamina);
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Ability", ReplicatedUsing = OnRep_MaxStamina)
-	FGameplayAttributeData MaxStamina;
-	ATTRIBUTE_ACCESSORS(UHRAttributeSet, MaxStamina);
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Ability", ReplicatedUsing = OnRep_Mana)
 	FGameplayAttributeData Mana;
 	ATTRIBUTE_ACCESSORS(UHRAttributeSet, Mana);
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Ability", ReplicatedUsing = OnRep_MaxHealth)
+	FGameplayAttributeData MaxHealth;
+	ATTRIBUTE_ACCESSORS(UHRAttributeSet, MaxHealth);
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Ability", ReplicatedUsing = OnRep_MaxStamina)
+	FGameplayAttributeData MaxStamina;
+	ATTRIBUTE_ACCESSORS(UHRAttributeSet, MaxStamina);
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Ability", ReplicatedUsing = OnRep_MaxMana)
 	FGameplayAttributeData MaxMana;
@@ -55,17 +55,18 @@ protected:
 	virtual void OnRep_Health(const FGameplayAttributeData& OldValue);
 
 	UFUNCTION()
-	virtual void OnRep_MaxHealth(const FGameplayAttributeData& OldValue);
-
-	UFUNCTION()
 	virtual void OnRep_Stamina(const FGameplayAttributeData& OldValue);
-
-	UFUNCTION()
-	virtual void OnRep_MaxStamina(const FGameplayAttributeData& OldValue);
 
 	UFUNCTION()
 	virtual void OnRep_Mana(const FGameplayAttributeData& OldValue);
 
 	UFUNCTION()
+	virtual void OnRep_MaxHealth(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+	virtual void OnRep_MaxStamina(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
 	virtual void OnRep_MaxMana(const FGameplayAttributeData& OldValue);
+
 };

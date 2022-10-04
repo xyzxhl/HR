@@ -2,19 +2,30 @@
 
 
 #include "HRAbility/HRAttributeSet.h"
-#include "HRAbility/HRAbilitySystemComponent.h"
 #include "GameplayEffect.h"
 #include "GameplayEffectExtension.h"
 #include "Net/UnrealNetwork.h"
 
 UHRAttributeSet::UHRAttributeSet()
     : Health(1.0f)
-    , MaxHealth(1.0f)
     , Stamina(1.0f)
-    , MaxStamina(1.0f)
     , Mana(0.0f)
+	, MaxHealth(1.0f)
+    , MaxStamina(1.0f)
     , MaxMana(0.0f)
 {
+}
+
+void UHRAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME_CONDITION_NOTIFY(UHRAttributeSet, Health, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UHRAttributeSet, Stamina, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UHRAttributeSet, Mana, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UHRAttributeSet, MaxHealth, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UHRAttributeSet, MaxStamina, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UHRAttributeSet, MaxMana, COND_None, REPNOTIFY_Always);
 }
 
 void UHRAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue)
@@ -25,30 +36,19 @@ void UHRAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, fl
 	{
 		AdjustAttributeForMaxChange(Health, MaxHealth, NewValue, GetHealthAttribute());
 	}
-	else if (Attribute == GetMaxStaminaAttribute())
+	else if (Attribute == GetMaxManaAttribute())
 	{
 		AdjustAttributeForMaxChange(Stamina, MaxStamina, NewValue, GetStaminaAttribute());
 	}
-	else if (Attribute == GetMaxManaAttribute()) {
+	else if (Attribute == GetMaxManaAttribute())
+	{
 		AdjustAttributeForMaxChange(Mana, MaxMana, NewValue, GetManaAttribute());
 	}
 }
 
-void UHRAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
-{
-	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-
-	DOREPLIFETIME(UHRAttributeSet, Health);
-	DOREPLIFETIME(UHRAttributeSet, MaxHealth);
-	DOREPLIFETIME(UHRAttributeSet, Stamina);
-	DOREPLIFETIME(UHRAttributeSet, MaxStamina);
-	DOREPLIFETIME(UHRAttributeSet, Mana);
-	DOREPLIFETIME(UHRAttributeSet, MaxMana);
-}
-
 void UHRAttributeSet::AdjustAttributeForMaxChange(FGameplayAttributeData& AffectedAttribute, const FGameplayAttributeData& MaxAttribute, float NewMaxValue, const FGameplayAttribute& AffectedAttributeProperty)
 {
-    UAbilitySystemComponent* AbilityComp = GetOwningAbilitySystemComponent();
+	UAbilitySystemComponent* AbilityComp = GetOwningAbilitySystemComponent();
 	const float CurrentMaxValue = MaxAttribute.GetCurrentValue();
 	if (!FMath::IsNearlyEqual(CurrentMaxValue, NewMaxValue) && AbilityComp)
 	{
@@ -64,19 +64,9 @@ void UHRAttributeSet::OnRep_Health(const FGameplayAttributeData& OldValue)
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UHRAttributeSet, Health, OldValue);
 }
 
-void UHRAttributeSet::OnRep_MaxHealth(const FGameplayAttributeData& OldValue)
-{
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UHRAttributeSet, MaxHealth, OldValue);
-}
-
 void UHRAttributeSet::OnRep_Stamina(const FGameplayAttributeData& OldValue)
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UHRAttributeSet, Stamina, OldValue);
-}
-
-void UHRAttributeSet::OnRep_MaxStamina(const FGameplayAttributeData& OldValue)
-{
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UHRAttributeSet, MaxStamina, OldValue);
 }
 
 void UHRAttributeSet::OnRep_Mana(const FGameplayAttributeData& OldValue)
@@ -84,7 +74,17 @@ void UHRAttributeSet::OnRep_Mana(const FGameplayAttributeData& OldValue)
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UHRAttributeSet, Mana, OldValue);
 }
 
+void UHRAttributeSet::OnRep_MaxHealth(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UHRAttributeSet, Health, OldValue);
+}
+
+void UHRAttributeSet::OnRep_MaxStamina(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UHRAttributeSet, Stamina, OldValue);
+}
+
 void UHRAttributeSet::OnRep_MaxMana(const FGameplayAttributeData& OldValue)
 {
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UHRAttributeSet, MaxMana, OldValue);
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UHRAttributeSet, Mana, OldValue);
 }

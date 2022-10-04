@@ -4,16 +4,13 @@
 #include "HRCharacter/HRInteractionComponent.h"
 #include "HRCharacter/HRLockViewComponent.h"
 #include "HRAbility/HRAbilitySystemComponent.h"
+#include "HRAbility/HRAttributeSet.h"
+#include "HRAbility/HRGameplayAbility.h"
 #include "Camera/CameraComponent.h"
 #include "Components/InputComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
-
-UAbilitySystemComponent* AHRCharacter::GetAbilitySystemComponent() const
-{
-	return AbilitySystemComp;
-}
 
 // Sets default values
 AHRCharacter::AHRCharacter()
@@ -49,6 +46,33 @@ AHRCharacter::AHRCharacter()
 	LockViewComp = CreateDefaultSubobject<UHRLockViewComponent>(TEXT("LockViewComp"));
 
 	AbilitySystemComp = CreateDefaultSubobject<UHRAbilitySystemComponent>(TEXT("AbilitySystem"));
+	AbilitySystemComp->SetIsReplicated(true);
+
+	AttributeSet = CreateDefaultSubobject<UHRAttributeSet>(TEXT("AttributeSet"));
+}
+
+UAbilitySystemComponent* AHRCharacter::GetAbilitySystemComponent() const
+{
+	return AbilitySystemComp;
+}
+
+void AHRCharacter::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+	if (AbilitySystemComp)
+	{
+		AbilitySystemComp->InitAbilityActorInfo(this, this);
+	}
+}
+
+void AHRCharacter::OnRep_Controller()
+{
+	Super::OnRep_Controller();
+
+	if (AbilitySystemComp)
+	{
+		AbilitySystemComp->RefreshAbilityActorInfo();
+	}
 }
 
 void AHRCharacter::MoveForward(float Value)
