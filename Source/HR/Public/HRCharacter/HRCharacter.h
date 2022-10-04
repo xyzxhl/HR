@@ -12,28 +12,30 @@ class HR_API AHRCharacter : public ACharacter, public IAbilitySystemInterface
 {
 	GENERATED_BODY()
 public:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
 	class USpringArmComponent* CameraBoom;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
 	class UCameraComponent* FollowCamera;
 
-protected:
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
 	class UHRLockViewComponent* LockViewComp;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Interact")
 	class UHRInteractionComponent* InteractionComp;
 
-public:
-    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="CharacterBase")
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AbilitySystem")
     class UHRAbilitySystemComponent* AbilitySystemComp;
 
-    virtual UAbilitySystemComponent* GetAbilitySystemComponent() const;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AbilitySystem")
+	class UHRAttributeSet* AttributeSet;
 
 public:
 	// Sets default values for this character's properties
 	AHRCharacter();
+	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const;
+	virtual void PossessedBy(AController* NewController) override;
+	virtual void OnRep_Controller() override;
 
 protected:
 	void MoveForward(float Value);
@@ -44,6 +46,7 @@ protected:
 
 	void LockViewToEnemy();
 
+public:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
