@@ -24,7 +24,10 @@ public:
 	static const FPrimaryAssetType	LimitedUsableItemType;
 	/** 无GA*/
 	static const FPrimaryAssetType	ReadOnlyItemType;
-	/** 直接带有GA(被动) 或 加载一些GA(主动)*/
+	/** 
+	 * 直接带有GA(被动) 或 加载一些GA(主动)
+	 * 带有启用限制
+	 */
 	static const FPrimaryAssetType	MaterielItemType;
 
 	static UHRAssetManager& Get();

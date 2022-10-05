@@ -4,11 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DataAsset.h"
+#include "Styling/SlateBrush.h"
+#include "HRAssetManager.h"
 #include "HRItem.generated.h"
 
-/**
- * 
- */
 UCLASS(Abstract, BlueprintType)
 class HR_API UHRItem : public UPrimaryDataAsset
 {
@@ -16,6 +15,7 @@ class HR_API UHRItem : public UPrimaryDataAsset
 	
 public:
 	UHRItem();
+	virtual FPrimaryAssetId GetPrimaryAssetId() const override;
 
 	/** ¿‡–Õ */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Item)
@@ -33,5 +33,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Item)
 	FSlateBrush ItemIcon;
 
-
+	UFUNCTION(BlueprintCallable, Category = Item)
+	FString GetIdentifierString() const;
 };

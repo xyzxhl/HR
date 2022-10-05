@@ -9,10 +9,10 @@
 UHRAttributeSet::UHRAttributeSet()
     : Health(1.0f)
     , Stamina(1.0f)
-    , Mana(0.0f)
+    , Mana(1.0f)
 	, MaxHealth(1.0f)
     , MaxStamina(1.0f)
-    , MaxMana(0.0f)
+    , MaxMana(1.0f)
 {
 }
 

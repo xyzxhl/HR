@@ -8,6 +8,7 @@
 const FPrimaryAssetType	UHRAssetManager::UnlimitedUsableItemType = TEXT("UnlimitedUsable");
 const FPrimaryAssetType	UHRAssetManager::LimitedUsableItemType = TEXT("LimitedUsable");
 const FPrimaryAssetType	UHRAssetManager::ReadOnlyItemType = TEXT("ReadOnly");
+const FPrimaryAssetType	UHRAssetManager::MaterielItemType = TEXT("Materiel");
 
 UHRAssetManager::UHRAssetManager()
 {

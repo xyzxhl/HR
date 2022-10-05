@@ -6,3 +6,13 @@
 UHRItem::UHRItem()
 {
 }
+
+FPrimaryAssetId UHRItem::GetPrimaryAssetId() const
+{
+    return FPrimaryAssetId(ItemType, GetFName());
+}
+
+FString UHRItem::GetIdentifierString() const
+{
+    return GetPrimaryAssetId().ToString();
+}
