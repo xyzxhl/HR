@@ -4,7 +4,7 @@
 #include "HRCharacter/HRInteractionComponent.h"
 #include "HRCharacter/HRLockViewComponent.h"
 #include "HRAbility/HRAbilitySystemComponent.h"
-#include "HRAbility/HRAttributeSet.h"
+#include "HRAbility/HRCharacterAttributeSet.h"
 #include "HRAbility/HRGameplayAbility.h"
 #include "Camera/CameraComponent.h"
 #include "Components/InputComponent.h"
@@ -48,7 +48,7 @@ AHRCharacter::AHRCharacter()
 	AbilitySystemComp = CreateDefaultSubobject<UHRAbilitySystemComponent>(TEXT("AbilitySystem"));
 	AbilitySystemComp->SetIsReplicated(true);
 
-	AttributeSet = CreateDefaultSubobject<UHRAttributeSet>(TEXT("AttributeSet"));
+	AttributeSet = CreateDefaultSubobject<UHRCharacterAttributeSet>(TEXT("AttributeSet"));
 }
 
 UAbilitySystemComponent* AHRCharacter::GetAbilitySystemComponent() const

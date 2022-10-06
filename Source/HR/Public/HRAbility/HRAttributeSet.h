@@ -5,6 +5,9 @@
 #include "CoreMinimal.h"
 #include "AttributeSet.h"
 #include "AbilitySystemComponent.h"
+#include "GameplayEffect.h"
+#include "GameplayEffectExtension.h"
+#include "Net/UnrealNetwork.h"
 #include "HRAttributeSet.generated.h"
 
 // Uses macros from AttributeSet.h
@@ -21,52 +24,56 @@ class HR_API UHRAttributeSet : public UAttributeSet
 
 public:
 	UHRAttributeSet();
-	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Ability", ReplicatedUsing = OnRep_Health)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Resource", ReplicatedUsing = OnRep_Health)
 	FGameplayAttributeData Health;
 	ATTRIBUTE_ACCESSORS(UHRAttributeSet, Health);
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Ability", ReplicatedUsing = OnRep_Stamina)
-	FGameplayAttributeData Stamina;
-	ATTRIBUTE_ACCESSORS(UHRAttributeSet, Stamina);
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Ability", ReplicatedUsing = OnRep_Mana)
-	FGameplayAttributeData Mana;
-	ATTRIBUTE_ACCESSORS(UHRAttributeSet, Mana);
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Ability", ReplicatedUsing = OnRep_MaxHealth)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Resource", ReplicatedUsing = OnRep_MaxHealth)
 	FGameplayAttributeData MaxHealth;
 	ATTRIBUTE_ACCESSORS(UHRAttributeSet, MaxHealth);
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Ability", ReplicatedUsing = OnRep_MaxStamina)
-	FGameplayAttributeData MaxStamina;
-	ATTRIBUTE_ACCESSORS(UHRAttributeSet, MaxStamina);
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Damage", ReplicatedUsing = OnRep_AttackPower)
+	FGameplayAttributeData AttackPower;
+	ATTRIBUTE_ACCESSORS(UHRAttributeSet, AttackPower);
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Ability", ReplicatedUsing = OnRep_MaxMana)
-	FGameplayAttributeData MaxMana;
-	ATTRIBUTE_ACCESSORS(UHRAttributeSet, MaxMana);
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Damage", ReplicatedUsing = OnRep_DefensePower)
+	FGameplayAttributeData DefensePower;
+	ATTRIBUTE_ACCESSORS(UHRAttributeSet, DefensePower);
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Speed", ReplicatedUsing = OnRep_MoveSpeed)
+	FGameplayAttributeData MoveSpeed;
+	ATTRIBUTE_ACCESSORS(UHRAttributeSet, MoveSpeed);
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Speed", ReplicatedUsing = OnRep_ActionSpeed)
+	FGameplayAttributeData ActionSpeed;
+	ATTRIBUTE_ACCESSORS(UHRAttributeSet, ActionSpeed);
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Speed", ReplicatedUsing = OnRep_AttackSpeed)
+	FGameplayAttributeData AttackSpeed;
+	ATTRIBUTE_ACCESSORS(UHRAttributeSet, AttackSpeed);
 
 protected:
-	void AdjustAttributeForMaxChange(FGameplayAttributeData& AffectedAttribute, const FGameplayAttributeData& MaxAttribute, float NewMaxValue, const FGameplayAttribute& AffectedAttributeProperty);
-
 	UFUNCTION()
 	virtual void OnRep_Health(const FGameplayAttributeData& OldValue);
-
-	UFUNCTION()
-	virtual void OnRep_Stamina(const FGameplayAttributeData& OldValue);
-
-	UFUNCTION()
-	virtual void OnRep_Mana(const FGameplayAttributeData& OldValue);
 
 	UFUNCTION()
 	virtual void OnRep_MaxHealth(const FGameplayAttributeData& OldValue);
 
 	UFUNCTION()
-	virtual void OnRep_MaxStamina(const FGameplayAttributeData& OldValue);
+	virtual void OnRep_AttackPower(const FGameplayAttributeData& OldValue);
 
 	UFUNCTION()
-	virtual void OnRep_MaxMana(const FGameplayAttributeData& OldValue);
+	virtual void OnRep_DefensePower(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+	virtual void OnRep_MoveSpeed(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+	virtual void OnRep_ActionSpeed(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+	virtual void OnRep_AttackSpeed(const FGameplayAttributeData& OldValue);
 
 };

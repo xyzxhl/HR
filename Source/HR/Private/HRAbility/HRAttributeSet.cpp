@@ -2,17 +2,15 @@
 
 
 #include "HRAbility/HRAttributeSet.h"
-#include "GameplayEffect.h"
-#include "GameplayEffectExtension.h"
-#include "Net/UnrealNetwork.h"
 
 UHRAttributeSet::UHRAttributeSet()
-    : Health(1.0f)
-    , Stamina(1.0f)
-    , Mana(1.0f)
-	, MaxHealth(1.0f)
-    , MaxStamina(1.0f)
-    , MaxMana(1.0f)
+    : Health(100.0f)
+	, MaxHealth(100.0f)
+	, AttackPower(1.0f)
+    , DefensePower(1.0f)
+	, MoveSpeed(1.0f)
+    , ActionSpeed(1.0f)
+	, AttackSpeed(1.0f)
 {
 }
 
@@ -21,42 +19,12 @@ void UHRAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutL
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME_CONDITION_NOTIFY(UHRAttributeSet, Health, COND_None, REPNOTIFY_Always);
-	DOREPLIFETIME_CONDITION_NOTIFY(UHRAttributeSet, Stamina, COND_None, REPNOTIFY_Always);
-	DOREPLIFETIME_CONDITION_NOTIFY(UHRAttributeSet, Mana, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UHRAttributeSet, MaxHealth, COND_None, REPNOTIFY_Always);
-	DOREPLIFETIME_CONDITION_NOTIFY(UHRAttributeSet, MaxStamina, COND_None, REPNOTIFY_Always);
-	DOREPLIFETIME_CONDITION_NOTIFY(UHRAttributeSet, MaxMana, COND_None, REPNOTIFY_Always);
-}
-
-void UHRAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue)
-{
-	Super::PreAttributeChange(Attribute, NewValue);
-
-	if (Attribute == GetMaxHealthAttribute())
-	{
-		AdjustAttributeForMaxChange(Health, MaxHealth, NewValue, GetHealthAttribute());
-	}
-	else if (Attribute == GetMaxManaAttribute())
-	{
-		AdjustAttributeForMaxChange(Stamina, MaxStamina, NewValue, GetStaminaAttribute());
-	}
-	else if (Attribute == GetMaxManaAttribute())
-	{
-		AdjustAttributeForMaxChange(Mana, MaxMana, NewValue, GetManaAttribute());
-	}
-}
-
-void UHRAttributeSet::AdjustAttributeForMaxChange(FGameplayAttributeData& AffectedAttribute, const FGameplayAttributeData& MaxAttribute, float NewMaxValue, const FGameplayAttribute& AffectedAttributeProperty)
-{
-	UAbilitySystemComponent* AbilityComp = GetOwningAbilitySystemComponent();
-	const float CurrentMaxValue = MaxAttribute.GetCurrentValue();
-	if (!FMath::IsNearlyEqual(CurrentMaxValue, NewMaxValue) && AbilityComp)
-	{
-		const float CurrentValue = AffectedAttribute.GetCurrentValue();
-		float NewDelta = (CurrentMaxValue > 0.f) ? (CurrentValue * NewMaxValue / CurrentMaxValue) - CurrentValue : NewMaxValue;
-
-		AbilityComp->ApplyModToAttributeUnsafe(AffectedAttributeProperty, EGameplayModOp::Additive, NewDelta);
-	}
+	DOREPLIFETIME_CONDITION_NOTIFY(UHRAttributeSet, AttackPower, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UHRAttributeSet, DefensePower, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UHRAttributeSet, MoveSpeed, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UHRAttributeSet, ActionSpeed, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UHRAttributeSet, AttackSpeed, COND_None, REPNOTIFY_Always);
 }
 
 void UHRAttributeSet::OnRep_Health(const FGameplayAttributeData& OldValue)
@@ -64,27 +32,32 @@ void UHRAttributeSet::OnRep_Health(const FGameplayAttributeData& OldValue)
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UHRAttributeSet, Health, OldValue);
 }
 
-void UHRAttributeSet::OnRep_Stamina(const FGameplayAttributeData& OldValue)
-{
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UHRAttributeSet, Stamina, OldValue);
-}
-
-void UHRAttributeSet::OnRep_Mana(const FGameplayAttributeData& OldValue)
-{
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UHRAttributeSet, Mana, OldValue);
-}
-
 void UHRAttributeSet::OnRep_MaxHealth(const FGameplayAttributeData& OldValue)
 {
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UHRAttributeSet, Health, OldValue);
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UHRAttributeSet, MaxHealth, OldValue);
 }
 
-void UHRAttributeSet::OnRep_MaxStamina(const FGameplayAttributeData& OldValue)
+void UHRAttributeSet::OnRep_AttackPower(const FGameplayAttributeData& OldValue)
 {
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UHRAttributeSet, Stamina, OldValue);
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UHRAttributeSet, AttackPower, OldValue);
 }
 
-void UHRAttributeSet::OnRep_MaxMana(const FGameplayAttributeData& OldValue)
+void UHRAttributeSet::OnRep_DefensePower(const FGameplayAttributeData& OldValue)
 {
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UHRAttributeSet, Mana, OldValue);
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UHRAttributeSet, DefensePower, OldValue);
+}
+
+void UHRAttributeSet::OnRep_MoveSpeed(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UHRAttributeSet, MoveSpeed, OldValue);
+}
+
+void UHRAttributeSet::OnRep_ActionSpeed(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UHRAttributeSet, ActionSpeed, OldValue);
+}
+
+void UHRAttributeSet::OnRep_AttackSpeed(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UHRAttributeSet, AttackSpeed, OldValue);
 }

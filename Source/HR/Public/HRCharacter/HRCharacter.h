@@ -28,7 +28,7 @@ public:
     class UHRAbilitySystemComponent* AbilitySystemComp;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AbilitySystem")
-	class UHRAttributeSet* AttributeSet;
+	class UHRCharacterAttributeSet* AttributeSet;
 
 public:
 	// Sets default values for this character's properties
