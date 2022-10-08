@@ -61,19 +61,13 @@ void UHRLockViewComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 
 		float tp = CameraTargetRotation.Pitch, ty = TargetRotation.Yaw, sp = SelfRotation.Pitch, sy = SelfRotation.Yaw;
 
-		//设置Yaw旋转
-		float YawRotation = (((ty > sy) ^ (abs(ty - sy) > 180.0f)) ? 1.0f : -1.0f) *
-			(abs(ty - sy) > 180.0f ? 360.0f - abs(ty - sy) : abs(ty - sy));
-
-		OwnerCharacter->AddControllerYawInput(YawRotation * DeltaTime * 10.0f);
-
 		//设置Pitch旋转
 		if (!bSetControllerPitch) {
 			if (sp < 180.0f || sp > 350.0f) {
-				OwnerCharacter->AddControllerPitchInput(DeltaTime * 360.0f);
+				OwnerCharacter->AddControllerPitchInput(DeltaTime * 180.0f);
 			}
 			else {
-				FRotator ControllerPitch(350.0f, 0, 0);
+				FRotator ControllerPitch(350.0f, sy, 0);
 
 				OwnerCharacter->Controller->SetControlRotation(ControllerPitch);
 
@@ -82,10 +76,16 @@ void UHRLockViewComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 		}
 		else {
 			CameraTargetRotation = FRotator(tp, 0, 0);
-			FRotator DeltaRot(tp * DeltaTime * 10.0f, 0, 0);
+			FRotator DeltaRot(tp * DeltaTime * 8.0f, 0, 0);
 
 			CurrentCamera->ProcessViewRotation(DeltaTime, CameraTargetRotation, DeltaRot);
 		}
+
+		//设置Yaw旋转
+		float YawRotation = (((ty > sy) ^ (abs(ty - sy) > 180.0f)) ? 1.0f : -1.0f) *
+			(abs(ty - sy) > 180.0f ? 360.0f - abs(ty - sy) : abs(ty - sy));
+
+		OwnerCharacter->AddControllerYawInput(YawRotation * DeltaTime * 8.0f);
 	}
 }
 
