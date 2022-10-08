@@ -2,11 +2,24 @@
 
 
 #include "HRCharacter/HRLockViewComponent.h"
-#include "HRCharacter\HRCharacter.h"
 #include "HRCreature/HREnemyPawn.h"
-#include "GameFramework/SpringArmComponent.h"
 #include "Kismet\GameplayStatics.h"
 #include "Kismet\KismetMathLibrary.h"
+
+void UHRLockViewComponent::LockViewToActor()
+{
+	if (bIsLockView) {
+		bIsLockView = false;
+		ActorLockTo = nullptr;
+	}
+	else {
+		ActorLockTo = EnemyCheck();
+		if (ActorLockTo) {
+			bIsLockView = true;
+		}
+	}
+	bSetControllerPitch = false;
+}
 
 // Sets default values for this component's properties
 UHRLockViewComponent::UHRLockViewComponent()
@@ -16,71 +29,64 @@ UHRLockViewComponent::UHRLockViewComponent()
 	PrimaryComponentTick.bCanEverTick = true;
 
 	ActorLockTo = nullptr;
-	isLockView = false;
+	bIsLockView = false;
+	bSetControllerPitch = false;
 }
-
 
 // Called when the game starts
 void UHRLockViewComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	OwnerCharacter = Cast<AHRCharacter>(GetOwner());
+	OwnerCharacter = Cast<APawn>(GetOwner());
 
 	CurrentCamera = UGameplayStatics::GetPlayerController(this, 0)->PlayerCameraManager;
 	CurrentCamera->ViewPitchMax = 30.0f;
 }
-
 
 // Called every frame
 void UHRLockViewComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	if (isLockView)
+	if (bIsLockView)
 	{
-		if (ActorLockTo) {
-			FVector Location = CurrentCamera->GetCameraLocation();
-			FVector TargetLotion = ActorLockTo->GetActorLocation();
+		FVector ActorLocation = OwnerCharacter->GetActorLocation();
+		FVector CameraLocation = CurrentCamera->GetCameraLocation();
+		FVector TargetLotion = ActorLockTo->GetActorLocation();
 
-			FRotator TargetRotation = UKismetMathLibrary::FindLookAtRotation(Location, TargetLotion);
-			FRotator SelfRotation = OwnerCharacter->GetControlRotation();
+		FRotator TargetRotation = UKismetMathLibrary::FindLookAtRotation(ActorLocation, TargetLotion);
+		FRotator CameraTargetRotation = UKismetMathLibrary::FindLookAtRotation(CameraLocation, TargetLotion);
+		FRotator SelfRotation = OwnerCharacter->GetControlRotation();
 
-			float tp = TargetRotation.Pitch, ty = TargetRotation.Yaw, sp = SelfRotation.Pitch, sy = SelfRotation.Yaw;
+		float tp = CameraTargetRotation.Pitch, ty = TargetRotation.Yaw, sp = SelfRotation.Pitch, sy = SelfRotation.Yaw;
 
-			if (tp > 30.0f) {
-				if (OwnerCharacter->CameraBoom->SocketOffset.Z < 200.0f) OwnerCharacter->CameraBoom->SocketOffset.Z += 300.0f * DeltaTime;
-				tp = 30.0f;
+		//设置Yaw旋转
+		float YawRotation = (((ty > sy) ^ (abs(ty - sy) > 180.0f)) ? 1.0f : -1.0f) *
+			(abs(ty - sy) > 180.0f ? 360.0f - abs(ty - sy) : abs(ty - sy));
+
+		OwnerCharacter->AddControllerYawInput(YawRotation * DeltaTime * 10.0f);
+
+		//设置Pitch旋转
+		if (!bSetControllerPitch) {
+			if (sp < 180.0f || sp > 350.0f) {
+				OwnerCharacter->AddControllerPitchInput(DeltaTime * 360.0f);
 			}
-			if (tp < 0.0f)
-				ResetCameraLocation(DeltaTime);
+			else {
+				FRotator ControllerPitch(350.0f, 0, 0);
 
-			float PitchRotation = (((tp > sp) ^ (abs(tp - sp) > 180.0f)) ? 1.0f : -1.0f) *
-				(abs(tp - sp) > 180.0f ? 360.0f - abs(tp - sp) : abs(tp - sp));
-			float YawRotation = (((ty > sy) ^ (abs(ty - sy) > 180.0f)) ? 1.0f : -1.0f) *
-				(abs(ty - sy) > 180.0f ? 360.0f - abs(ty - sy) : abs(ty - sy));
+				OwnerCharacter->Controller->SetControlRotation(ControllerPitch);
 
-			OwnerCharacter->AddControllerPitchInput(-PitchRotation * DeltaTime * 10);
-			OwnerCharacter->AddControllerYawInput(YawRotation * DeltaTime * 10);
+				bSetControllerPitch = true;
+			}
 		}
 		else {
-			ActorLockTo = EnemyCheck();
-			if (!ActorLockTo)
-			{
-				isLockView = false;
-			}
+			CameraTargetRotation = FRotator(tp, 0, 0);
+			FRotator DeltaRot(tp * DeltaTime * 10.0f, 0, 0);
+
+			CurrentCamera->ProcessViewRotation(DeltaTime, CameraTargetRotation, DeltaRot);
 		}
 	}
-	else
-		ResetCameraLocation(DeltaTime);
-}
-
-void UHRLockViewComponent::ResetCameraLocation(float DeltaTime)
-{
-	if (OwnerCharacter->CameraBoom->SocketOffset.Z > 0.1f)
-		OwnerCharacter->CameraBoom->SocketOffset.Z -= 300.0f * DeltaTime;
-	else
-		OwnerCharacter->CameraBoom->SocketOffset.Z = 0.0f;
 }
 
 AActor* UHRLockViewComponent::EnemyCheck()
@@ -94,10 +100,9 @@ AActor* UHRLockViewComponent::EnemyCheck()
 
 	FVector End = EyeLocation + (EyeRotation.Vector() * 5000);
 
-
 	TArray<FHitResult> Hits;
 
-	float Radius = 100.f;
+	float Radius = 100.0f;
 
 	FCollisionShape Shape;
 	Shape.SetSphere(Radius);

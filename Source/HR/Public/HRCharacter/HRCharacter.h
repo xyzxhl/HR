@@ -44,8 +44,6 @@ protected:
 	void TurnRight(float Value);
 	void LookUp(float Value);
 
-	void LockViewToEnemy();
-
 public:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
