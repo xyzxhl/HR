@@ -4,7 +4,7 @@
 #include "HRCharacter/HRInteractionComponent.h"
 #include "HRCharacter/HRLockViewComponent.h"
 #include "HRAbility/HRAbilitySystemComponent.h"
-#include "HRAbility/HRAttributeSet.h"
+#include "HRAbility/HRCharacterAttributeSet.h"
 #include "HRAbility/HRGameplayAbility.h"
 #include "Camera/CameraComponent.h"
 #include "Components/InputComponent.h"
@@ -48,7 +48,7 @@ AHRCharacter::AHRCharacter()
 	AbilitySystemComp = CreateDefaultSubobject<UHRAbilitySystemComponent>(TEXT("AbilitySystem"));
 	AbilitySystemComp->SetIsReplicated(true);
 
-	AttributeSet = CreateDefaultSubobject<UHRAttributeSet>(TEXT("AttributeSet"));
+	AttributeSet = CreateDefaultSubobject<UHRCharacterAttributeSet>(TEXT("AttributeSet"));
 }
 
 UAbilitySystemComponent* AHRCharacter::GetAbilitySystemComponent() const
@@ -59,6 +59,7 @@ UAbilitySystemComponent* AHRCharacter::GetAbilitySystemComponent() const
 void AHRCharacter::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
+
 	if (AbilitySystemComp)
 	{
 		AbilitySystemComp->InitAbilityActorInfo(this, this);
@@ -99,7 +100,7 @@ void AHRCharacter::MoveRight(float Value)
 
 void AHRCharacter::TurnRight(float Value)
 {
-	if (!LockViewComp->isLockView)
+	if (!LockViewComp->bIsLockView)
 	{
 		AddControllerYawInput(Value);
 	}
@@ -107,15 +108,10 @@ void AHRCharacter::TurnRight(float Value)
 
 void AHRCharacter::LookUp(float Value)
 {
-	if (!LockViewComp->isLockView)
+	if (!LockViewComp->bIsLockView)
 	{
 		AddControllerPitchInput(Value);
 	}
-}
-
-void AHRCharacter::LockViewToEnemy()
-{
-	LockViewComp->isLockView = !LockViewComp->isLockView;
 }
 
 // Called when the game starts or when spawned
@@ -141,7 +137,7 @@ void AHRCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 
 	PlayerInputComponent->BindAction("PrimaryInteract", IE_Pressed, InteractionComp, &UHRInteractionComponent::PrimaryInteract);
-	PlayerInputComponent->BindAction("EnemyCheck", IE_Pressed, this, &AHRCharacter::LockViewToEnemy);
+	PlayerInputComponent->BindAction("EnemyCheck", IE_Pressed, LockViewComp, &UHRLockViewComponent::LockViewToActor);
 
 	PlayerInputComponent->BindAxis("Move Forward / Backward", this, &AHRCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("Move Right / Left", this, &AHRCharacter::MoveRight);

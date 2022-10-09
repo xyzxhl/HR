@@ -28,7 +28,7 @@ public:
     class UHRAbilitySystemComponent* AbilitySystemComp;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AbilitySystem")
-	class UHRAttributeSet* AttributeSet;
+	class UHRCharacterAttributeSet* AttributeSet;
 
 public:
 	// Sets default values for this character's properties
@@ -43,8 +43,6 @@ protected:
 
 	void TurnRight(float Value);
 	void LookUp(float Value);
-
-	void LockViewToEnemy();
 
 public:
 	// Called when the game starts or when spawned
