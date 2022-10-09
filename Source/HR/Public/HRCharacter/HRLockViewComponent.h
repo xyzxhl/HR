@@ -31,8 +31,15 @@ protected:
 	bool bSetControllerPitch;
 
 public:
+	/** 最大锁定距离 */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float MaxDistanceToActor;
+
+	/** 是否锁定 */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bIsLockView;
 
+	/** 进行锁定与解锁 */
 	void LockViewToActor();
 
 public:	

@@ -24,6 +24,8 @@ class HR_API UHRAttributeSet : public UAttributeSet
 
 public:
 	UHRAttributeSet();
+	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
+	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Resource", ReplicatedUsing = OnRep_Health)
@@ -47,14 +49,16 @@ public:
 	ATTRIBUTE_ACCESSORS(UHRAttributeSet, MoveSpeed);
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Speed", ReplicatedUsing = OnRep_ActionSpeed)
-	FGameplayAttributeData ActionSpeed;
-	ATTRIBUTE_ACCESSORS(UHRAttributeSet, ActionSpeed);
+	FGameplayAttributeData AbilitySpeed;
+	ATTRIBUTE_ACCESSORS(UHRAttributeSet, AbilitySpeed);
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Speed", ReplicatedUsing = OnRep_AttackSpeed)
 	FGameplayAttributeData AttackSpeed;
 	ATTRIBUTE_ACCESSORS(UHRAttributeSet, AttackSpeed);
 
 protected:
+	void AdjustAttributeForMaxChange(FGameplayAttributeData& AffectedAttribute, const FGameplayAttributeData& MaxAttribute, float NewMaxValue, const FGameplayAttribute& AffectedAttributeProperty);
+
 	UFUNCTION()
 	virtual void OnRep_Health(const FGameplayAttributeData& OldValue);
 

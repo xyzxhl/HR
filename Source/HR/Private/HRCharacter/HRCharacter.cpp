@@ -3,9 +3,7 @@
 #include "HRCharacter/HRCharacter.h"
 #include "HRCharacter/HRInteractionComponent.h"
 #include "HRCharacter/HRLockViewComponent.h"
-#include "HRAbility/HRAbilitySystemComponent.h"
-#include "HRAbility/HRCharacterAttributeSet.h"
-#include "HRAbility/HRGameplayAbility.h"
+#include "HRAbility/HRExtraAttributeSet.h"
 #include "Camera/CameraComponent.h"
 #include "Components/InputComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -25,9 +23,9 @@ AHRCharacter::AHRCharacter()
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 500.0f, 0.0f);
 
-	GetCharacterMovement()->JumpZVelocity = 700.f;
+	GetCharacterMovement()->JumpZVelocity = 600.f;
 	GetCharacterMovement()->AirControl = 0.35f;
-	GetCharacterMovement()->MaxWalkSpeed = 500.f;
+	GetCharacterMovement()->MaxWalkSpeed = 250.f;
 	GetCharacterMovement()->MinAnalogWalkSpeed = 20.f;
 	GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
 
@@ -44,36 +42,6 @@ AHRCharacter::AHRCharacter()
 	InteractionComp = CreateDefaultSubobject<UHRInteractionComponent>(TEXT("InteractionComp"));
 
 	LockViewComp = CreateDefaultSubobject<UHRLockViewComponent>(TEXT("LockViewComp"));
-
-	AbilitySystemComp = CreateDefaultSubobject<UHRAbilitySystemComponent>(TEXT("AbilitySystem"));
-	AbilitySystemComp->SetIsReplicated(true);
-
-	AttributeSet = CreateDefaultSubobject<UHRCharacterAttributeSet>(TEXT("AttributeSet"));
-}
-
-UAbilitySystemComponent* AHRCharacter::GetAbilitySystemComponent() const
-{
-	return AbilitySystemComp;
-}
-
-void AHRCharacter::PossessedBy(AController* NewController)
-{
-	Super::PossessedBy(NewController);
-
-	if (AbilitySystemComp)
-	{
-		AbilitySystemComp->InitAbilityActorInfo(this, this);
-	}
-}
-
-void AHRCharacter::OnRep_Controller()
-{
-	Super::OnRep_Controller();
-
-	if (AbilitySystemComp)
-	{
-		AbilitySystemComp->RefreshAbilityActorInfo();
-	}
 }
 
 void AHRCharacter::MoveForward(float Value)

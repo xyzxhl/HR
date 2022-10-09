@@ -2,7 +2,7 @@
 
 
 #include "HRCharacter/HRLockViewComponent.h"
-#include "HRCreature/HREnemyPawn.h"
+#include "HRCharacter\HREnemy.h"
 #include "Kismet\GameplayStatics.h"
 #include "Kismet\KismetMathLibrary.h"
 
@@ -31,6 +31,8 @@ UHRLockViewComponent::UHRLockViewComponent()
 	ActorLockTo = nullptr;
 	bIsLockView = false;
 	bSetControllerPitch = false;
+
+	MaxDistanceToActor = 3000.0f;
 }
 
 // Called when the game starts
@@ -51,9 +53,19 @@ void UHRLockViewComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 
 	if (bIsLockView)
 	{
+		if (!ActorLockTo->IsValidLowLevelFast()) {
+			LockViewToActor();
+			return;
+		}
+
 		FVector ActorLocation = OwnerCharacter->GetActorLocation();
 		FVector CameraLocation = CurrentCamera->GetCameraLocation();
 		FVector TargetLotion = ActorLockTo->GetActorLocation();
+
+		if ((ActorLocation - TargetLotion).Size() > MaxDistanceToActor) {
+			LockViewToActor();
+			return;
+		}
 
 		FRotator TargetRotation = UKismetMathLibrary::FindLookAtRotation(ActorLocation, TargetLotion);
 		FRotator CameraTargetRotation = UKismetMathLibrary::FindLookAtRotation(CameraLocation, TargetLotion);
@@ -98,11 +110,11 @@ AActor* UHRLockViewComponent::EnemyCheck()
 	FRotator EyeRotation;
 	OwnerCharacter->GetActorEyesViewPoint(EyeLocation, EyeRotation);
 
-	FVector End = EyeLocation + (EyeRotation.Vector() * 5000);
+	FVector End = EyeLocation + (EyeRotation.Vector() * MaxDistanceToActor);
 
 	TArray<FHitResult> Hits;
 
-	float Radius = 100.0f;
+	float Radius = 300.0f;
 
 	FCollisionShape Shape;
 	Shape.SetSphere(Radius);
@@ -117,7 +129,7 @@ AActor* UHRLockViewComponent::EnemyCheck()
 		if (HitActor)
 		{
 			DrawDebugLine(GetWorld(), EyeLocation, End, LineColor, false, 2.0f, 0, 2.0f);
-			if (HitActor->GetClass()->IsChildOf(AHREnemyPawn::StaticClass()))
+			if (HitActor->GetClass()->IsChildOf(AHREnemy::StaticClass()))
 			{
 				DrawDebugSphere(GetWorld(), Hit.ImpactPoint, Radius, 32, LineColor, false, 2.0f);
 				return HitActor;
