@@ -40,7 +40,7 @@ void UHRAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallback
 		else if (Data.EvaluatedData.Attribute == GetMoveSpeedAttribute()) {
 			SetMoveSpeed(FMath::Clamp(GetMoveSpeed(), 1.0f, 1.3f));
 
-			TargetCharacter->GetCharacterMovement()->MaxWalkSpeed *= GetMoveSpeed();
+			TargetCharacter->GetCharacterMovement()->MaxWalkSpeed = GetMoveSpeed() * TargetCharacter->BaseSpeed;
 		}
 	}
 }

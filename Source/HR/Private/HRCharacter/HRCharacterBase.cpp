@@ -5,12 +5,16 @@
 #include "HRAbility/HRAbilitySystemComponent.h"
 #include "HRAbility/HRAttributeSet.h"
 #include "HRAbility/HRGameplayAbility.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values
 AHRCharacterBase::AHRCharacterBase()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	BaseSpeed = 250.0f;
+	GetCharacterMovement()->MaxWalkSpeed = BaseSpeed;
 
 	AbilitySystemComp = CreateDefaultSubobject<UHRAbilitySystemComponent>(TEXT("AbilitySystem"));
 	AbilitySystemComp->SetIsReplicated(true);

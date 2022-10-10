@@ -19,6 +19,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AbilitySystem")
 	class UHRAttributeSet* AttributeSet;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Speed")
+	float BaseSpeed;
+
 public:
 	// Sets default values for this character's properties
 	AHRCharacterBase();
