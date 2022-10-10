@@ -104,7 +104,7 @@ void UHRLockViewComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 AActor* UHRLockViewComponent::EnemyCheck()
 {
 	FCollisionObjectQueryParams ObjectQueryParams;
-	ObjectQueryParams.AddObjectTypesToQuery(ECC_WorldDynamic);
+	ObjectQueryParams.AddObjectTypesToQuery(ECC_Pawn);
 
 	FVector EyeLocation;
 	FRotator EyeRotation;
