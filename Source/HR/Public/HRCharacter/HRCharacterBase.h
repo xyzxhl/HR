@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "GameplayAbilitySpec.h"
 #include "AbilitySystemInterface.h"
 #include "HRCharacterBase.generated.h"
 
@@ -22,6 +23,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Speed")
 	float BaseSpeed;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AbilitySystem")
+	TMap<FString, FGameplayAbilitySpecHandle> AbilityHandles;
+
 public:
 	// Sets default values for this character's properties
 	AHRCharacterBase();
@@ -31,4 +35,10 @@ public:
 
 	UFUNCTION()
 	void Die();
+
+	UFUNCTION(BlueprintCallable, Category = "AbilitySystem")
+	void AddAbility(TSubclassOf<UGameplayAbility> GameplayAbility, FString Name);
+
+	UFUNCTION(BlueprintCallable, Category = "AbilitySystem")
+	void UseAbility(FString Name);
 };

@@ -50,3 +50,25 @@ void AHRCharacterBase::OnRep_Controller()
 void AHRCharacterBase::Die()
 {
 }
+
+bool AHRCharacterBase::AddAbility(TSubclassOf<UGameplayAbility> GameplayAbility, FString Name)
+{
+	FGameplayAbilitySpecHandle Handle = AbilitySystemComp->K2_GiveAbility(GameplayAbility);
+	if (Handle.IsValid()) {
+		AbilityHandles.Add(Name, Handle);
+		return true;
+	}
+	else
+		return false;
+}
+
+bool AHRCharacterBase::UseAbility(FString Name)
+{
+	FGameplayAbilitySpecHandle* Handle = AbilityHandles.Find(Name);
+	if (Handle) {
+		AbilitySystemComp->TryActivateAbility(*Handle);
+		return true;
+	}
+	else
+		return false;
+}
