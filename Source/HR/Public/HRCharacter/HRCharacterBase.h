@@ -33,12 +33,22 @@ public:
 	virtual void PossessedBy(AController* NewController) override;
 	virtual void OnRep_Controller() override;
 
-	UFUNCTION()
+	UFUNCTION(BlueprintImplementableEvent, Category = "AbilitySystem")
 	void Die();
 
+	/** 添加能力 */
 	UFUNCTION(BlueprintCallable, Category = "AbilitySystem")
-	void AddAbility(TSubclassOf<UGameplayAbility> GameplayAbility, FString Name);
+	bool AddAbility(TSubclassOf<UGameplayAbility> GameplayAbility, FString Name);
 
+	/** 确认能力是否存在 */
 	UFUNCTION(BlueprintCallable, Category = "AbilitySystem")
-	void UseAbility(FString Name);
+	bool FindAbility(FString Name);
+
+	/** 使用能力 */
+	UFUNCTION(BlueprintCallable, Category = "AbilitySystem")
+	bool UseAbility(FString Name);
+
+	/** 删除能力 */
+	UFUNCTION(BlueprintCallable, Category = "AbilitySystem")
+	bool DeleteAbility(FString Name);
 };

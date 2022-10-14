@@ -12,5 +12,5 @@ class HR_API UHRGameplayAbility : public UGameplayAbility
 	GENERATED_BODY()
 	
 public:
-
+	UHRGameplayAbility();
 };
