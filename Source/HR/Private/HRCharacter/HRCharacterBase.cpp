@@ -47,6 +47,41 @@ void AHRCharacterBase::OnRep_Controller()
 	}
 }
 
-void AHRCharacterBase::Die()
+bool AHRCharacterBase::AddAbility(TSubclassOf<UGameplayAbility> GameplayAbility, FString Name)
 {
+	FGameplayAbilitySpecHandle Handle = AbilitySystemComp->K2_GiveAbility(GameplayAbility);
+	if (Handle.IsValid()) {
+		AbilityHandles.Add(Name, Handle);
+		return true;
+	}
+	else
+		return false;
+}
+
+bool AHRCharacterBase::FindAbility(FString Name)
+{
+	return AbilityHandles.Contains(Name);
+}
+
+bool AHRCharacterBase::UseAbility(FString Name)
+{
+	FGameplayAbilitySpecHandle* Handle = AbilityHandles.Find(Name);
+	if (Handle) {
+		AbilitySystemComp->TryActivateAbility(*Handle);
+		return true;
+	}
+	else
+		return false;
+}
+
+bool AHRCharacterBase::DeleteAbility(FString Name)
+{
+	FGameplayAbilitySpecHandle* Handle = AbilityHandles.Find(Name);
+	if (Handle) {
+		AbilitySystemComp->ClearAbility(*Handle);
+		AbilityHandles.Remove(Name);
+		return true;
+	}
+	else
+		return false;
 }

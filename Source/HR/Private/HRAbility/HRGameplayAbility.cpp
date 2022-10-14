@@ -3,3 +3,7 @@
 
 #include "HRAbility/HRGameplayAbility.h"
 
+UHRGameplayAbility::UHRGameplayAbility()
+{
+    InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerActor;
+}
