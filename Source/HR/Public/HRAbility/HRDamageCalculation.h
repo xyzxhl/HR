@@ -4,18 +4,18 @@
 
 #include "CoreMinimal.h"
 #include "GameplayEffectExecutionCalculation.h"
-#include "HRDamegeCalculation.generated.h"
+#include "HRDamageCalculation.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class HR_API UHRDamegeCalculation : public UGameplayEffectExecutionCalculation
+class HR_API UHRDamageCalculation : public UGameplayEffectExecutionCalculation
 {
 	GENERATED_BODY()
 	
 public:
-	UHRDamegeCalculation();
+	UHRDamageCalculation();
 	virtual void Execute_Implementation(const FGameplayEffectCustomExecutionParameters& ExecutionParams, OUT FGameplayEffectCustomExecutionOutput& OutExecutionOutput) const override;
 
 };

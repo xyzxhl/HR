@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "HRAbility/HRDamegeCalculation.h"
+#include "HRAbility/HRDamageCalculation.h"
 #include "HRAbility/HRAttributeSet.h"
 #include "HRAbility/HRExtraAttributeSet.h"
 #include "AbilitySystemComponent.h"
@@ -29,13 +29,13 @@ static const HRDamageStatics& DamageStatics()
 	return DamageStaticsObject;
 }
 
-UHRDamegeCalculation::UHRDamegeCalculation()
+UHRDamageCalculation::UHRDamageCalculation()
 {
 	RelevantAttributesToCapture.Add(DamageStatics().DefensePowerDef);
 	RelevantAttributesToCapture.Add(DamageStatics().AttackPowerDef);
 }
 
-void UHRDamegeCalculation::Execute_Implementation(const FGameplayEffectCustomExecutionParameters& ExecutionParams, OUT FGameplayEffectCustomExecutionOutput& OutExecutionOutput) const
+void UHRDamageCalculation::Execute_Implementation(const FGameplayEffectCustomExecutionParameters& ExecutionParams, OUT FGameplayEffectCustomExecutionOutput& OutExecutionOutput) const
 {
 	UAbilitySystemComponent* TargetAbilitySystemComponent = ExecutionParams.GetTargetAbilitySystemComponent();
 	UAbilitySystemComponent* SourceAbilitySystemComponent = ExecutionParams.GetSourceAbilitySystemComponent();
