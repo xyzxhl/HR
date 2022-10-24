@@ -2,9 +2,9 @@
 
 
 #include "HRCharacter/HRLockViewComponent.h"
-#include "HRCharacter\HREnemy.h"
 #include "Kismet\GameplayStatics.h"
 #include "Kismet\KismetMathLibrary.h"
+#include "HRAI/AICharacter/HREnemyCharacter.h"
 
 void UHRLockViewComponent::LockViewToActor()
 {
@@ -129,7 +129,7 @@ AActor* UHRLockViewComponent::EnemyCheck()
 		if (HitActor)
 		{
 			DrawDebugLine(GetWorld(), EyeLocation, End, LineColor, false, 2.0f, 0, 2.0f);
-			if (HitActor->GetClass()->IsChildOf(AHREnemy::StaticClass()))
+			if (HitActor->GetClass()->IsChildOf(AHREnemyCharacter::StaticClass()))
 			{
 				DrawDebugSphere(GetWorld(), Hit.ImpactPoint, Radius, 32, LineColor, false, 2.0f);
 				return HitActor;
