@@ -29,9 +29,7 @@ EBTNodeResult::Type UHRBTTask_SpeedChange::ExecuteTask(UBehaviorTreeComponent& O
 					return EBTNodeResult::Succeeded;
 				}
 			}
-			return EBTNodeResult::Failed;
 		}
-		return EBTNodeResult::Failed;
 	}
 	return EBTNodeResult::Failed;
 }
