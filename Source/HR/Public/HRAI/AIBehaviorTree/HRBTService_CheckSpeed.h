@@ -23,8 +23,5 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "KeySelector")
 		FBlackboardKeySelector SpeedCheckKey;
 
-	UPROPERTY(EditAnywhere, Category = "AIComponents")
-		TSubclassOf<UActorComponent> MovementComp;
-
 	virtual void TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
 };

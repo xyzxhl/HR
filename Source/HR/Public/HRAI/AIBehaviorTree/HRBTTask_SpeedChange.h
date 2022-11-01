@@ -17,9 +17,6 @@ class HR_API UHRBTTask_SpeedChange : public UBTTaskNode
 
 protected:
 
-	UPROPERTY(EditAnywhere, Category = "AIComponents")
-		TSubclassOf<UActorComponent> MovementComp;
-
 	UPROPERTY(EditAnywhere,Category="KeySelector")
 		FBlackboardKeySelector SpeedKey;
 };

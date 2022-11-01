@@ -5,6 +5,7 @@
 #include <AIModule/Classes/AIController.h>
 #include <GameFramework/CharacterMovementComponent.h>
 #include <AIModule/Classes/BehaviorTree/BlackboardComponent.h>
+#include <GameFramework/Character.h>
 
 EBTNodeResult::Type UHRBTTask_SpeedChange::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
@@ -12,10 +13,10 @@ EBTNodeResult::Type UHRBTTask_SpeedChange::ExecuteTask(UBehaviorTreeComponent& O
 	AAIController* AIC = OwnerComp.GetAIOwner();
 	if (ensure(AIC))
 	{
-		APawn* AICharacter = Cast<APawn>(AIC->GetPawn());
+		ACharacter* AICharacter = AIC->GetCharacter();
 		if (ensure(AICharacter))
 		{
-			UCharacterMovementComponent* CMC = Cast<UCharacterMovementComponent>(AICharacter->GetComponentByClass(MovementComp));
+			UCharacterMovementComponent* CMC = Cast<UCharacterMovementComponent>(AICharacter->GetComponentByClass(UCharacterMovementComponent::StaticClass()));
 			if (ensure(CMC))
 			{
 				if (BBC->GetValueAsBool(SpeedKey.SelectedKeyName))
