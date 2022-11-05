@@ -5,6 +5,7 @@
 #include <AIModule/Classes/AIController.h>
 #include <GameFramework/CharacterMovementComponent.h>
 #include <AIModule/Classes/BehaviorTree/BlackboardComponent.h>
+#include <GameFramework/Character.h>
 
 void UHRBTService_CheckSpeed::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
 {
@@ -14,10 +15,10 @@ void UHRBTService_CheckSpeed::TickNode(UBehaviorTreeComponent& OwnerComp, uint8*
 	UBlackboardComponent* BBC = OwnerComp.GetBlackboardComponent();
 	if (ensure(AIC))
 	{
-		APawn* AIPawn = AIC->GetPawn();
+		ACharacter* AIPawn = AIC->GetCharacter();
 		if (ensure(AIPawn))
 		{
-			UCharacterMovementComponent* CMC = Cast<UCharacterMovementComponent>(AIPawn->GetComponentByClass(MovementComp));
+			UCharacterMovementComponent* CMC = Cast<UCharacterMovementComponent>(AIPawn->GetComponentByClass(UCharacterMovementComponent::StaticClass()));
 			bool bFast = CMC->MaxWalkSpeed == 800;
 			BBC->SetValueAsBool(SpeedCheckKey.SelectedKeyName, bFast);
 		}
