@@ -35,19 +35,6 @@ void UHRExtraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCal
 
 }
 
-void UHRExtraAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
-{
-	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-
-	DOREPLIFETIME_CONDITION_NOTIFY(UHRExtraAttributeSet, Stamina, COND_None, REPNOTIFY_Always);
-	DOREPLIFETIME_CONDITION_NOTIFY(UHRExtraAttributeSet, MaxStamina, COND_None, REPNOTIFY_Always);
-	DOREPLIFETIME_CONDITION_NOTIFY(UHRExtraAttributeSet, StaminaRecoveryRate, COND_None, REPNOTIFY_Always);
-	DOREPLIFETIME_CONDITION_NOTIFY(UHRExtraAttributeSet, Mana, COND_None, REPNOTIFY_Always);
-	DOREPLIFETIME_CONDITION_NOTIFY(UHRExtraAttributeSet, MaxMana, COND_None, REPNOTIFY_Always);
-	DOREPLIFETIME_CONDITION_NOTIFY(UHRExtraAttributeSet, ManaRecoveryRate, COND_None, REPNOTIFY_Always);
-	DOREPLIFETIME_CONDITION_NOTIFY(UHRExtraAttributeSet, InitialMana, COND_None, REPNOTIFY_Always);
-}
-
 void UHRExtraAttributeSet::AdjustAttributeForMaxChange(FGameplayAttributeData& AffectedAttribute, const FGameplayAttributeData& MaxAttribute, float NewMaxValue, const FGameplayAttribute& AffectedAttributeProperty)
 {
 	UAbilitySystemComponent* AbilityComp = GetOwningAbilitySystemComponent();
@@ -59,39 +46,4 @@ void UHRExtraAttributeSet::AdjustAttributeForMaxChange(FGameplayAttributeData& A
 
 		AbilityComp->ApplyModToAttributeUnsafe(AffectedAttributeProperty, EGameplayModOp::Additive, NewDelta);
 	}
-}
-
-void UHRExtraAttributeSet::OnRep_Stamina(const FGameplayAttributeData& OldValue)
-{
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UHRExtraAttributeSet, Stamina, OldValue);
-}
-
-void UHRExtraAttributeSet::OnRep_MaxStamina(const FGameplayAttributeData& OldValue)
-{
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UHRExtraAttributeSet, MaxStamina, OldValue);
-}
-
-void UHRExtraAttributeSet::OnRep_StaminaRecoveryRate(const FGameplayAttributeData& OldValue)
-{
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UHRExtraAttributeSet, StaminaRecoveryRate, OldValue);
-}
-
-void UHRExtraAttributeSet::OnRep_Mana(const FGameplayAttributeData& OldValue)
-{
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UHRExtraAttributeSet, Mana, OldValue);
-}
-
-void UHRExtraAttributeSet::OnRep_MaxMana(const FGameplayAttributeData& OldValue)
-{
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UHRExtraAttributeSet, MaxMana, OldValue);
-}
-
-void UHRExtraAttributeSet::OnRep_ManaRecoveryRate(const FGameplayAttributeData& OldValue)
-{
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UHRExtraAttributeSet, ManaRecoveryRate, OldValue);
-}
-
-void UHRExtraAttributeSet::OnRep_InitialMana(const FGameplayAttributeData& OldValue)
-{
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UHRExtraAttributeSet, InitialMana, OldValue);
 }

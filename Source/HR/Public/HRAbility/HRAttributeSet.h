@@ -26,73 +26,48 @@ public:
 	UHRAttributeSet();
 	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
 	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
-	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 	/** 生命值 */
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Resource", ReplicatedUsing = OnRep_Health)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Resource")
 	FGameplayAttributeData Health;
 	ATTRIBUTE_ACCESSORS(UHRAttributeSet, Health);
 
 	/** 最大生命值 */
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Resource", ReplicatedUsing = OnRep_MaxHealth)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Resource")
 	FGameplayAttributeData MaxHealth;
 	ATTRIBUTE_ACCESSORS(UHRAttributeSet, MaxHealth);
 
 	/** 伤害系数，计算优先度最低，无ui */
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Damage", ReplicatedUsing = OnRep_AttackPower)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Damage")
 	FGameplayAttributeData AttackPower;
 	ATTRIBUTE_ACCESSORS(UHRAttributeSet, AttackPower);
 
 	/** 伤害减免系数，计算优先度最低，无ui */
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Damage", ReplicatedUsing = OnRep_DefensePower)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Damage")
 	FGameplayAttributeData DefensePower;
 	ATTRIBUTE_ACCESSORS(UHRAttributeSet, DefensePower);
 
 	/** 移动速度，无ui */
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Speed", ReplicatedUsing = OnRep_MoveSpeed)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Speed")
 	FGameplayAttributeData MoveSpeed;
 	ATTRIBUTE_ACCESSORS(UHRAttributeSet, MoveSpeed);
 
 	/** 影响涉及动作的GA，无ui */
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Speed", ReplicatedUsing = OnRep_ActionSpeed)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Speed")
 	FGameplayAttributeData AbilitySpeed;
 	ATTRIBUTE_ACCESSORS(UHRAttributeSet, AbilitySpeed);
 
 	/** 影响基础攻击和其派生的速度，无ui */
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Speed", ReplicatedUsing = OnRep_AttackSpeed)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Speed")
 	FGameplayAttributeData AttackSpeed;
 	ATTRIBUTE_ACCESSORS(UHRAttributeSet, AttackSpeed);
 
-	/** 临时值，用于伤害计算，在GA中对这个值进行修改 
-	  *	第一项：总伤害
-	  * 第二项：物理伤害
-	  * 
-	  */
+	/** 临时值，用于伤害计算，在GA中对这个值进行修改 */
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Damage")
-	float Damage;
+	FGameplayAttributeData Damage;
+	ATTRIBUTE_ACCESSORS(UHRAttributeSet, Damage);
 
 protected:
 	void AdjustAttributeForMaxChange(FGameplayAttributeData& AffectedAttribute, const FGameplayAttributeData& MaxAttribute, float NewMaxValue, const FGameplayAttribute& AffectedAttributeProperty);
-
-	UFUNCTION()
-	virtual void OnRep_Health(const FGameplayAttributeData& OldValue);
-
-	UFUNCTION()
-	virtual void OnRep_MaxHealth(const FGameplayAttributeData& OldValue);
-
-	UFUNCTION()
-	virtual void OnRep_AttackPower(const FGameplayAttributeData& OldValue);
-
-	UFUNCTION()
-	virtual void OnRep_DefensePower(const FGameplayAttributeData& OldValue);
-
-	UFUNCTION()
-	virtual void OnRep_MoveSpeed(const FGameplayAttributeData& OldValue);
-
-	UFUNCTION()
-	virtual void OnRep_ActionSpeed(const FGameplayAttributeData& OldValue);
-
-	UFUNCTION()
-	virtual void OnRep_AttackSpeed(const FGameplayAttributeData& OldValue);
 
 };

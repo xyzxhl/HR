@@ -31,7 +31,6 @@ public:
 	AHRCharacterBase();
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const;
 	virtual void PossessedBy(AController* NewController) override;
-	virtual void OnRep_Controller() override;
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "AbilitySystem")
 	void Die();

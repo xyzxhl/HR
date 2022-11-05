@@ -37,16 +37,6 @@ void AHRCharacterBase::PossessedBy(AController* NewController)
 	}
 }
 
-void AHRCharacterBase::OnRep_Controller()
-{
-	Super::OnRep_Controller();
-
-	if (AbilitySystemComp)
-	{
-		AbilitySystemComp->RefreshAbilityActorInfo();
-	}
-}
-
 bool AHRCharacterBase::AddAbility(TSubclassOf<UGameplayAbility> GameplayAbility, FString Name)
 {
 	FGameplayAbilitySpecHandle Handle = AbilitySystemComp->K2_GiveAbility(GameplayAbility);

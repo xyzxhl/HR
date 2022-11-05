@@ -26,58 +26,36 @@ public:
 	UHRExtraAttributeSet();
 	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
 	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
-	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Resource", ReplicatedUsing = OnRep_Stamina)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Resource")
 	FGameplayAttributeData Stamina;
 	ATTRIBUTE_ACCESSORS(UHRExtraAttributeSet, Stamina);
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Resource", ReplicatedUsing = OnRep_MaxStamina)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Resource")
 	FGameplayAttributeData MaxStamina;
 	ATTRIBUTE_ACCESSORS(UHRExtraAttributeSet, MaxStamina);
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Resource", ReplicatedUsing = OnRep_StaminaRecoveryRate)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Resource")
 	FGameplayAttributeData StaminaRecoveryRate;
 	ATTRIBUTE_ACCESSORS(UHRExtraAttributeSet, StaminaRecoveryRate);
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Resource", ReplicatedUsing = OnRep_Mana)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Resource")
 	FGameplayAttributeData Mana;
 	ATTRIBUTE_ACCESSORS(UHRExtraAttributeSet, Mana);
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Resource", ReplicatedUsing = OnRep_MaxMana)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Resource")
 	FGameplayAttributeData MaxMana;
 	ATTRIBUTE_ACCESSORS(UHRExtraAttributeSet, MaxMana);
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Resource", ReplicatedUsing = OnRep_ManaRecoveryRate)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Resource")
 	FGameplayAttributeData ManaRecoveryRate;
 	ATTRIBUTE_ACCESSORS(UHRExtraAttributeSet, ManaRecoveryRate);
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Resource", ReplicatedUsing = OnRep_InitialMana)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Resource")
 	FGameplayAttributeData InitialMana;
 	ATTRIBUTE_ACCESSORS(UHRExtraAttributeSet, InitialMana);
 
 protected:
 	void AdjustAttributeForMaxChange(FGameplayAttributeData& AffectedAttribute, const FGameplayAttributeData& MaxAttribute, float NewMaxValue, const FGameplayAttribute& AffectedAttributeProperty);
-
-	UFUNCTION()
-	virtual void OnRep_Stamina(const FGameplayAttributeData& OldValue);
-
-	UFUNCTION()
-	virtual void OnRep_MaxStamina(const FGameplayAttributeData& OldValue);
-
-	UFUNCTION()
-	virtual void OnRep_StaminaRecoveryRate(const FGameplayAttributeData& OldValue);
-
-	UFUNCTION()
-	virtual void OnRep_Mana(const FGameplayAttributeData& OldValue);
-
-	UFUNCTION()
-	virtual void OnRep_MaxMana(const FGameplayAttributeData& OldValue);
-
-	UFUNCTION()
-	virtual void OnRep_ManaRecoveryRate(const FGameplayAttributeData& OldValue);
-
-	UFUNCTION()
-	virtual void OnRep_InitialMana(const FGameplayAttributeData& OldValue);
 
 };
