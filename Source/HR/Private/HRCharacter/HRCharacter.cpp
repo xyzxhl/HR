@@ -6,8 +6,6 @@
 #include "HRAbility/HRExtraAttributeSet.h"
 #include "Camera/CameraComponent.h"
 #include "Components/InputComponent.h"
-#include "GameFramework/CharacterMovementComponent.h"
-#include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
 
 // Sets default values
@@ -41,6 +39,8 @@ AHRCharacter::AHRCharacter()
 	InteractionComp = CreateDefaultSubobject<UHRInteractionComponent>(TEXT("InteractionComp"));
 
 	LockViewComp = CreateDefaultSubobject<UHRLockViewComponent>(TEXT("LockViewComp"));
+
+	ExtraAttributeSet = CreateDefaultSubobject<UHRExtraAttributeSet>(TEXT("ExtraAttributeSet"));
 }
 
 void AHRCharacter::MoveForward(float Value)

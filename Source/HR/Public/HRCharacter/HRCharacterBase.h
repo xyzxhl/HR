@@ -5,11 +5,15 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "GameplayAbilitySpec.h"
+#include "GameFramework/CharacterMovementComponent.h"
+#include "GameFramework/Controller.h"
 #include "AbilitySystemInterface.h"
+#include "HRAbility/HRAbilitySystemComponent.h"
+#include "HRAbility/HRGameplayAbility.h"
 #include "HRCharacterBase.generated.h"
 
 UCLASS()
-class HR_API AHRCharacterBase : public ACharacter
+class HR_API AHRCharacterBase : public ACharacter, public IAbilitySystemInterface
 {
 	GENERATED_BODY()
 

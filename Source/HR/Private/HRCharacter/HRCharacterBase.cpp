@@ -2,10 +2,7 @@
 
 
 #include "HRCharacter/HRCharacterBase.h"
-#include "HRAbility/HRAbilitySystemComponent.h"
 #include "HRAbility/HRAttributeSet.h"
-#include "HRAbility/HRGameplayAbility.h"
-#include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values
 AHRCharacterBase::AHRCharacterBase()

@@ -20,7 +20,7 @@ struct HRDamageStatics
 		//true说明：使用属性快照，在GE实例化时获取属性
 		DEFINE_ATTRIBUTE_CAPTUREDEF(UHRAttributeSet, AttackPower, Source, true);
 
-		DEFINE_ATTRIBUTE_CAPTUREDEF(UHRAttributeSet, Damage, Source, true);
+		DEFINE_ATTRIBUTE_CAPTUREDEF(UHRAttributeSet, Damage, Target, true);
 	}
 };
 

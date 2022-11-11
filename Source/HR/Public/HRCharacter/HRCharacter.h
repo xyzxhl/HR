@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "HRCharacter/HRCharacterBase.h"
-#include "AbilitySystemInterface.h"
 #include "HRCharacter.generated.h"
 
 UCLASS()

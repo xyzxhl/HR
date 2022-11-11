@@ -2,6 +2,7 @@
 
 
 #include "HRAbility/HRExtraAttributeSet.h"
+#include "HRCharacter/HRCharacter.h"
 
 UHRExtraAttributeSet::UHRExtraAttributeSet()
     : Stamina(100.0f)
@@ -32,7 +33,19 @@ void UHRExtraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCal
 {
 	Super::PostGameplayEffectExecute(Data);
 
+	AActor* TargetActor = Data.Target.AbilityActorInfo->AvatarActor.Get();
+	if (TargetActor->GetClass()->IsChildOf(AHRCharacter::StaticClass())) {
+		AHRCharacter* TargetCharacter = Cast<AHRCharacter>(TargetActor);
 
+		if (Data.EvaluatedData.Attribute == GetStaminaAttribute()) {
+			SetStamina(FMath::Clamp(GetStamina(), 0.0f, GetMaxStamina()));
+
+		}
+		else if (Data.EvaluatedData.Attribute == GetManaAttribute()) {
+			SetMana(FMath::Clamp(GetMana(), 0.0f, GetMaxMana()));
+
+		}
+	}
 }
 
 void UHRExtraAttributeSet::AdjustAttributeForMaxChange(FGameplayAttributeData& AffectedAttribute, const FGameplayAttributeData& MaxAttribute, float NewMaxValue, const FGameplayAttribute& AffectedAttributeProperty)
