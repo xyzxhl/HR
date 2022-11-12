@@ -7,7 +7,10 @@
 #include "HRDamageCalculation.generated.h"
 
 /**
- * 
+ * 负责处理玩家对敌人造成的伤害
+ * 计算伤害系数，伤害减免系数
+ * 直接修改Target的生命值
+ * 根据ManaRecoveryRate直接修改Source的Mana
  */
 UCLASS()
 class HR_API UHRDamageCalculation : public UGameplayEffectExecutionCalculation

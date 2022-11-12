@@ -11,16 +11,21 @@ struct HRDamageStatics
 	DECLARE_ATTRIBUTE_CAPTUREDEF(DefensePower);
 	DECLARE_ATTRIBUTE_CAPTUREDEF(AttackPower);
 	DECLARE_ATTRIBUTE_CAPTUREDEF(Damage);
+	DECLARE_ATTRIBUTE_CAPTUREDEF(Health);
+	DECLARE_ATTRIBUTE_CAPTUREDEF(Mana);
+	DECLARE_ATTRIBUTE_CAPTUREDEF(ManaRecoveryRate);
 
 	HRDamageStatics()
 	{
 		//false说明：不使用属性快照，在GE将要应用时获取属性
 		DEFINE_ATTRIBUTE_CAPTUREDEF(UHRAttributeSet, DefensePower, Target, false);
+		DEFINE_ATTRIBUTE_CAPTUREDEF(UHRAttributeSet, Health, Target, false);
+		DEFINE_ATTRIBUTE_CAPTUREDEF(UHRExtraAttributeSet, Mana, Source, false);
 
 		//true说明：使用属性快照，在GE实例化时获取属性
 		DEFINE_ATTRIBUTE_CAPTUREDEF(UHRAttributeSet, AttackPower, Source, true);
-
-		DEFINE_ATTRIBUTE_CAPTUREDEF(UHRAttributeSet, Damage, Target, true);
+		DEFINE_ATTRIBUTE_CAPTUREDEF(UHRAttributeSet, Damage, Source, true);
+		DEFINE_ATTRIBUTE_CAPTUREDEF(UHRExtraAttributeSet, ManaRecoveryRate, Source, true);
 	}
 };
 
@@ -35,6 +40,9 @@ UHRDamageCalculation::UHRDamageCalculation()
 	RelevantAttributesToCapture.Add(DamageStatics().DefensePowerDef);
 	RelevantAttributesToCapture.Add(DamageStatics().AttackPowerDef);
 	RelevantAttributesToCapture.Add(DamageStatics().DamageDef);
+	RelevantAttributesToCapture.Add(DamageStatics().HealthDef);
+	RelevantAttributesToCapture.Add(DamageStatics().ManaDef);
+	RelevantAttributesToCapture.Add(DamageStatics().ManaRecoveryRateDef);
 }
 
 void UHRDamageCalculation::Execute_Implementation(const FGameplayEffectCustomExecutionParameters& ExecutionParams, OUT FGameplayEffectCustomExecutionOutput& OutExecutionOutput) const
@@ -64,9 +72,14 @@ void UHRDamageCalculation::Execute_Implementation(const FGameplayEffectCustomExe
 	float Damage = 0.f;
 	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().DamageDef, EvaluationParameters, Damage);
 
+	float ManaRecoveryRate = 0.f;
+	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().ManaRecoveryRateDef, EvaluationParameters, ManaRecoveryRate);
+
 	float DamageDone = Damage * AttackPower * DefensePower;
+	float ManaRecovery = DamageDone * ManaRecoveryRate;
 	if (DamageDone > 0.f)
 	{
-		OutExecutionOutput.AddOutputModifier(FGameplayModifierEvaluatedData(DamageStatics().DamageProperty, EGameplayModOp::Additive, DamageDone));
+		OutExecutionOutput.AddOutputModifier(FGameplayModifierEvaluatedData(DamageStatics().HealthProperty, EGameplayModOp::Additive, -DamageDone));
+		OutExecutionOutput.AddOutputModifier(FGameplayModifierEvaluatedData(DamageStatics().ManaProperty, EGameplayModOp::Additive, ManaRecovery));
 	}
 }

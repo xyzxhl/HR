@@ -8,6 +8,7 @@
 #include "GameplayEffect.h"
 #include "GameplayEffectExtension.h"
 #include "Net/UnrealNetwork.h"
+#include "HRAbility/HRAttributeSet.h"
 #include "HRExtraAttributeSet.generated.h"
 
 // Uses macros from AttributeSet.h
@@ -18,7 +19,7 @@
 	GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)
 
 UCLASS()
-class HR_API UHRExtraAttributeSet : public UAttributeSet
+class HR_API UHRExtraAttributeSet : public UHRAttributeSet
 {
 	GENERATED_BODY()
 
@@ -54,8 +55,4 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Resource")
 	FGameplayAttributeData InitialMana;
 	ATTRIBUTE_ACCESSORS(UHRExtraAttributeSet, InitialMana);
-
-protected:
-	void AdjustAttributeForMaxChange(FGameplayAttributeData& AffectedAttribute, const FGameplayAttributeData& MaxAttribute, float NewMaxValue, const FGameplayAttribute& AffectedAttributeProperty);
-
 };

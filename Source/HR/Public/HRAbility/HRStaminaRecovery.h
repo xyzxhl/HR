@@ -7,7 +7,7 @@
 #include "HRStaminaRecovery.generated.h"
 
 /**
- * 
+ * 负责捕获StaminaRecoveryRate的MMC
  */
 UCLASS()
 class HR_API UHRStaminaRecovery : public UGameplayModMagnitudeCalculation

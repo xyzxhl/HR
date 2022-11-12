@@ -21,9 +21,6 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AbilitySystem")
     class UHRAbilitySystemComponent* AbilitySystemComp;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AbilitySystem")
-	class UHRAttributeSet* AttributeSet;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Speed")
 	float BaseSpeed;
 

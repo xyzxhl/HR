@@ -25,7 +25,7 @@ float UHRStaminaRecovery::CalculateBaseMagnitude_Implementation(const FGameplayE
 	float StaminaRecovery = 0.f;
 	GetCapturedAttributeMagnitude(StaminaRecoveryRateDef, Spec, EvaluationParameters, StaminaRecovery);
 
-	StaminaRecovery *= 0.05;
+	StaminaRecovery *= 0.05f;
 
     return StaminaRecovery;
 }

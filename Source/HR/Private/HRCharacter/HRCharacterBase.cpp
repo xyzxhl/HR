@@ -15,8 +15,6 @@ AHRCharacterBase::AHRCharacterBase()
 
 	AbilitySystemComp = CreateDefaultSubobject<UHRAbilitySystemComponent>(TEXT("AbilitySystem"));
 	AbilitySystemComp->SetIsReplicated(true);
-
-	AttributeSet = CreateDefaultSubobject<UHRAttributeSet>(TEXT("AttributeSet"));
 }
 
 UAbilitySystemComponent* AHRCharacterBase::GetAbilitySystemComponent() const
