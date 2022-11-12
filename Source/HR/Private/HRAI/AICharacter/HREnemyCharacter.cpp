@@ -19,6 +19,8 @@ void AHREnemyCharacter::PostInitializeComponents()
 	PawnSensingComp->OnSeePawn.AddDynamic(this, &AHREnemyCharacter::OnPawnSeen);
 }
 
+
+// When the enemy pawns catch a player in the eyesight, set the TargetActor to it and try to attack.
 void AHREnemyCharacter::OnPawnSeen(APawn* Pawn)
 {
 	AAIController* AIController = Cast<AAIController>(GetController());
