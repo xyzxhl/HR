@@ -24,7 +24,9 @@ class HR_API UHRAttributeSet : public UAttributeSet
 
 public:
 	UHRAttributeSet();
+	/** 属性修改前调用 */
 	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
+	/** 应用GE属性修改后调用 */
 	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
 
 	/** 生命值 */
@@ -68,6 +70,7 @@ public:
 	ATTRIBUTE_ACCESSORS(UHRAttributeSet, Damage);
 
 protected:
+	/** 用于处理最大值变化，百分比缩放当前值 */
 	void AdjustAttributeForMaxChange(FGameplayAttributeData& AffectedAttribute, const FGameplayAttributeData& MaxAttribute, float NewMaxValue, const FGameplayAttribute& AffectedAttributeProperty);
 
 };
