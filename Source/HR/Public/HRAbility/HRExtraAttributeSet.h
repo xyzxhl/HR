@@ -2,12 +2,6 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
-#include "AttributeSet.h"
-#include "AbilitySystemComponent.h"
-#include "GameplayEffect.h"
-#include "GameplayEffectExtension.h"
-#include "Net/UnrealNetwork.h"
 #include "HRAbility/HRAttributeSet.h"
 #include "HRExtraAttributeSet.generated.h"
 
@@ -25,7 +19,9 @@ class HR_API UHRExtraAttributeSet : public UHRAttributeSet
 
 public:
 	UHRExtraAttributeSet();
+	/** 属性修改前调用 */
 	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
+	/** 应用GE属性修改后调用 */
 	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Resource")

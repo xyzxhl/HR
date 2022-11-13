@@ -64,7 +64,10 @@ public:
 	FGameplayAttributeData AttackSpeed;
 	ATTRIBUTE_ACCESSORS(UHRAttributeSet, AttackSpeed);
 
-	/** 临时值，用于伤害计算，在GA中对这个值进行修改 */
+	/** 
+	 * 临时值，用于伤害计算，在GA中对这个值进行修改
+	 * 无需手动修改，修改蓝图（继承自HRGameplayAbility）中的Damage即可
+	 */
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Damage")
 	FGameplayAttributeData Damage;
 	ATTRIBUTE_ACCESSORS(UHRAttributeSet, Damage);

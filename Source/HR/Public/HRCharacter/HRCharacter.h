@@ -10,6 +10,7 @@ UCLASS()
 class HR_API AHRCharacter : public AHRCharacterBase
 {
 	GENERATED_BODY()
+
 public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
 	class USpringArmComponent* CameraBoom;

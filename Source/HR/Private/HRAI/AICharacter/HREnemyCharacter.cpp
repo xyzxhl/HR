@@ -2,6 +2,7 @@
 
 
 #include "HRAI/AICharacter/HREnemyCharacter.h"
+#include "HRAbility/HRAttributeSet.h"
 #include <AIModule/Classes/AIController.h>
 #include <AIModule/Classes/BehaviorTree/BlackboardComponent.h>
 #include <AIModule/Classes/Perception/PawnSensingComponent.h>
@@ -10,6 +11,8 @@
 AHREnemyCharacter::AHREnemyCharacter()
 {
 	PawnSensingComp = CreateDefaultSubobject<UPawnSensingComponent>("PawnSensingComp");
+
+	AttributeSet = CreateDefaultSubobject<UHRAttributeSet>(TEXT("AttributeSet"));
 }
 
 void AHREnemyCharacter::PostInitializeComponents()

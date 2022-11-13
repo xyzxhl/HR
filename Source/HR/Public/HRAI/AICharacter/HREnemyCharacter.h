@@ -14,6 +14,10 @@ class HR_API AHREnemyCharacter : public AHRCharacterBase
 	GENERATED_BODY()
 
 public:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AbilitySystem")
+	class UHRAttributeSet* AttributeSet;
+
+public:
 	// Sets default values for this character's properties
 	AHREnemyCharacter();
 

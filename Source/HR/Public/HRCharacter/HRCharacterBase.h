@@ -12,6 +12,13 @@
 #include "HRAbility/HRGameplayAbility.h"
 #include "HRCharacterBase.generated.h"
 
+
+/**
+ * 角色基类
+ * 挂载了ASC
+ * 提供了加载、卸载、调用GA的函数
+ * 声明了函数Die，会在生命值低于0时调用
+ */
 UCLASS()
 class HR_API AHRCharacterBase : public ACharacter, public IAbilitySystemInterface
 {
@@ -33,6 +40,7 @@ public:
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const;
 	virtual void PossessedBy(AController* NewController) override;
 
+	/** 仅声明，应在蓝图中实现 */
 	UFUNCTION(BlueprintImplementableEvent, Category = "AbilitySystem")
 	void Die();
 
