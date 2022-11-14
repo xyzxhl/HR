@@ -7,12 +7,31 @@
 #include <AIModule/Classes/BehaviorTree/BlackboardComponent.h>
 #include <AIModule/Classes/Perception/PawnSensingComponent.h>
 #include <DrawDebugHelpers.h>
+#include "Miscellaneous/HRWorldUserWidget.h"
 
 AHREnemyCharacter::AHREnemyCharacter()
 {
 	PawnSensingComp = CreateDefaultSubobject<UPawnSensingComponent>("PawnSensingComp");
 
 	AttributeSet = CreateDefaultSubobject<UHRAttributeSet>(TEXT("AttributeSet"));
+
+	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
+
+}
+
+void AHREnemyCharacter::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+
+	if (ActiveHealthBar == nullptr)
+	{
+		ActiveHealthBar = CreateWidget<UHRWorldUserWidget>(GetWorld(), HealthBarWidgetClass);
+		if (ActiveHealthBar)
+		{
+			ActiveHealthBar->ActorToAttach = this;
+			ActiveHealthBar->AddToViewport();
+		}
+	}
 }
 
 void AHREnemyCharacter::PostInitializeComponents()

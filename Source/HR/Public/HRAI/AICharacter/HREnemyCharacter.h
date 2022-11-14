@@ -7,6 +7,8 @@
 #include "HREnemyCharacter.generated.h"
 
 class UPawnSensingComponent;
+class UHRWorldUserWidget;
+class UUserWidget;
 
 UCLASS()
 class HR_API AHREnemyCharacter : public AHRCharacterBase
@@ -15,19 +17,29 @@ class HR_API AHREnemyCharacter : public AHRCharacterBase
 
 public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AbilitySystem")
-	class UHRAttributeSet* AttributeSet;
+		class UHRAttributeSet* AttributeSet;
 
 public:
-	// Sets default values for this character's properties
 	AHREnemyCharacter();
 
 protected:
 
+	UHRWorldUserWidget* ActiveHealthBar;
+
+	UPROPERTY(VisibleAnywhere, Category = "Effects")
+		FName TimeToHit;
+
+	UPROPERTY(EditDefaultsOnly, Category = "UI")
+		TSubclassOf<UUserWidget> HealthBarWidgetClass;
+
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 		UPawnSensingComponent* PawnSensingComp;
 
+	virtual void Tick(float DeltaSeconds) override;
+
 	virtual void PostInitializeComponents() override;
 
+
 	UFUNCTION()
-	void OnPawnSeen(APawn* Pawn);
+		void OnPawnSeen(APawn* Pawn);
 };
