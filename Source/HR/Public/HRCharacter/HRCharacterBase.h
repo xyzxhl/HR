@@ -44,6 +44,10 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, Category = "AbilitySystem")
 	void Die();
 
+	/** 仅声明，应在蓝图中实现 */
+	UFUNCTION(BlueprintImplementableEvent, Category = "AbilitySystem")
+	void HealthChange();
+
 	/** 添加能力 */
 	UFUNCTION(BlueprintCallable, Category = "AbilitySystem")
 	bool AddAbility(TSubclassOf<UGameplayAbility> GameplayAbility, FString Name);

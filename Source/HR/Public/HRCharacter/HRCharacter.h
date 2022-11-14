@@ -31,7 +31,14 @@ public:
 	// Sets default values for this character's properties
 	AHRCharacter();
 
-protected:
+	/** 仅声明，应在蓝图中实现 */
+	UFUNCTION(BlueprintImplementableEvent, Category = "AbilitySystem")
+	void StaminaChange();
+
+	/** 仅声明，应在蓝图中实现 */
+	UFUNCTION(BlueprintImplementableEvent, Category = "AbilitySystem")
+	void ManaChange();
+
 	void MoveForward(float Value);
 	void MoveRight(float Value);
 

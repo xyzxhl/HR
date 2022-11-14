@@ -40,10 +40,12 @@ void UHRExtraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCal
 		if (Data.EvaluatedData.Attribute == GetStaminaAttribute()) {
 			SetStamina(FMath::Clamp(GetStamina(), 0.0f, GetMaxStamina()));
 
+			TargetCharacter->StaminaChange();
 		}
 		else if (Data.EvaluatedData.Attribute == GetManaAttribute()) {
 			SetMana(FMath::Clamp(GetMana(), 0.0f, GetMaxMana()));
 
+			TargetCharacter->ManaChange();
 		}
 	}
 }

@@ -31,11 +31,13 @@ void UHRAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallback
 		AHRCharacterBase* TargetCharacter = Cast<AHRCharacterBase>(TargetActor);
 
 		if (Data.EvaluatedData.Attribute == GetHealthAttribute()) {
-			SetHealth(FMath::Clamp(GetHealth(), 0.0f, GetMaxHealth()));
-
-			if (GetHealth() < 0.1f) {
+			if (GetHealth() <= 0.0f) {
 				TargetCharacter->Die();
 			}
+
+			SetHealth(FMath::Clamp(GetHealth(), 0.0f, GetMaxHealth()));
+			
+			TargetCharacter->HealthChange();
 		}
 		else if (Data.EvaluatedData.Attribute == GetMoveSpeedAttribute()) {
 			SetMoveSpeed(FMath::Clamp(GetMoveSpeed(), 1.0f, 1.3f));
