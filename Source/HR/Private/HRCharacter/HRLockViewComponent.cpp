@@ -6,6 +6,9 @@
 #include "Kismet\KismetMathLibrary.h"
 #include "HRAI/AICharacter/HREnemyCharacter.h"
 
+
+static TAutoConsoleVariable<bool> CVarDrawDebugger(TEXT("hr.DrawDebugger"), false, TEXT("是否显示调试功能"), ECVF_Cheat);
+
 void UHRLockViewComponent::LockViewToActor()
 {
 	if (bIsLockView) {
@@ -21,11 +24,9 @@ void UHRLockViewComponent::LockViewToActor()
 	bSetControllerPitch = false;
 }
 
-// Sets default values for this component's properties
+
 UHRLockViewComponent::UHRLockViewComponent()
 {
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 
 	ActorLockTo = nullptr;
@@ -35,7 +36,7 @@ UHRLockViewComponent::UHRLockViewComponent()
 	MaxDistanceToActor = 3000.0f;
 }
 
-// Called when the game starts
+
 void UHRLockViewComponent::BeginPlay()
 {
 	Super::BeginPlay();
@@ -46,7 +47,7 @@ void UHRLockViewComponent::BeginPlay()
 	CurrentCamera->ViewPitchMax = 30.0f;
 }
 
-// Called every frame
+
 void UHRLockViewComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
@@ -103,6 +104,8 @@ void UHRLockViewComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 
 AActor* UHRLockViewComponent::EnemyCheck()
 {
+	bool bDrawDebug = CVarDrawDebugger.GetValueOnGameThread();
+
 	FCollisionObjectQueryParams ObjectQueryParams;
 	ObjectQueryParams.AddObjectTypesToQuery(ECC_Pawn);
 
@@ -128,10 +131,18 @@ AActor* UHRLockViewComponent::EnemyCheck()
 		AActor* HitActor = Hit.GetActor();
 		if (HitActor)
 		{
-			DrawDebugLine(GetWorld(), EyeLocation, End, LineColor, false, 2.0f, 0, 2.0f);
+			if (bDrawDebug)
+			{
+				DrawDebugLine(GetWorld(), EyeLocation, End, LineColor, false, 2.0f, 0, 2.0f);
+			}
 			if (HitActor->GetClass()->IsChildOf(AHREnemyCharacter::StaticClass()))
 			{
-				DrawDebugSphere(GetWorld(), Hit.ImpactPoint, Radius, 32, LineColor, false, 2.0f);
+
+				if (bDrawDebug)
+				{
+					DrawDebugSphere(GetWorld(), Hit.ImpactPoint, Radius, 32, LineColor, false, 2.0f);
+				}
+
 				return HitActor;
 			}
 		}

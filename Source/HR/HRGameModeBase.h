@@ -44,4 +44,9 @@ protected:
 
 	UFUNCTION()
 		void OnQueryCompleted(UEnvQueryInstanceBlueprintWrapper* QueryInstance, EEnvQueryStatus::Type QueryStatus);
+
+protected:
+	
+	UFUNCTION(Exec)
+		void DamageAll();
 };

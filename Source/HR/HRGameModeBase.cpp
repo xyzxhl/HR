@@ -86,3 +86,15 @@ void AHRGameModeBase::OnQueryCompleted(UEnvQueryInstanceBlueprintWrapper* QueryI
 	}
 }
 
+void AHRGameModeBase::DamageAll()
+{
+	for (TActorIterator<AHREnemyCharacter> It(GetWorld()); It; ++It)
+	{
+		AHREnemyCharacter* Bot = *It;
+		UHRAbilitySystemComponent* ASC = Cast<UHRAbilitySystemComponent>(Bot->GetAbilitySystemComponent());
+		if (ensure(ASC))
+		{
+		}
+	}
+}
+
