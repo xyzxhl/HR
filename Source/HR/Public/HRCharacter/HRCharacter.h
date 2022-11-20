@@ -28,29 +28,42 @@ public:
 	class UHRExtraAttributeSet* ExtraAttributeSet;
 
 public:
-	// Sets default values for this character's properties
+
 	AHRCharacter();
 
-	/** 仅声明，应在蓝图中实现 */
-	UFUNCTION(BlueprintImplementableEvent, Category = "AbilitySystem")
-	void StaminaChange();
+	// 仅在cpp可编辑
+	UFUNCTION()
+	void OnHealthChanged(AActor* InstigatorActor, UAbilitySystemComponent* OwnerComp, float NewValue);
 
-	/** 仅声明，应在蓝图中实现 */
-	UFUNCTION(BlueprintImplementableEvent, Category = "AbilitySystem")
-	void ManaChange();
+	// 仅在cpp可编辑
+	UFUNCTION()
+	void OnStaminaChanged(AActor* InstigatorActor, UAbilitySystemComponent* OwnerComp, float NewValue);
+
+	// 仅在cpp可编辑
+	UFUNCTION()
+	void OnManaChanged(AActor* InstigatorActor, UAbilitySystemComponent* OwnerComp, float NewValue);
+
+	// 仅在cpp可编辑
+	UFUNCTION()
+	void Die();
 
 	void MoveForward(float Value);
+
 	void MoveRight(float Value);
 
 	void TurnRight(float Value);
+
 	void LookUp(float Value);
 
 public:
 	virtual void BeginPlay() override;
 
 public:	
+
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	virtual void PostInitializeComponents() override;
 
 };

@@ -4,6 +4,7 @@
 #include "HRCharacter/HRCharacterBase.h"
 #include "HRAbility/HRAttributeSet.h"
 
+
 // Sets default values
 AHRCharacterBase::AHRCharacterBase()
 {

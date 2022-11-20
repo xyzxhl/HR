@@ -8,6 +8,10 @@
 #include <AIModule/Classes/Perception/PawnSensingComponent.h>
 #include <DrawDebugHelpers.h>
 #include "Miscellaneous/HRWorldUserWidget.h"
+#include "BrainComponent.h"
+#include <GameFramework/Character.h>
+#include "Components/CapsuleComponent.h"
+#include "GameplayEffectTypes.h"
 
 AHREnemyCharacter::AHREnemyCharacter()
 {
@@ -16,12 +20,12 @@ AHREnemyCharacter::AHREnemyCharacter()
 	AttributeSet = CreateDefaultSubobject<UHRAttributeSet>(TEXT("AttributeSet"));
 
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
-
 }
 
-void AHREnemyCharacter::Tick(float DeltaSeconds)
+
+void AHREnemyCharacter::BeginPlay()
 {
-	Super::Tick(DeltaSeconds);
+	Super::BeginPlay();
 
 	if (ActiveHealthBar == nullptr)
 	{
@@ -39,8 +43,15 @@ void AHREnemyCharacter::PostInitializeComponents()
 	Super::PostInitializeComponents();
 
 	PawnSensingComp->OnSeePawn.AddDynamic(this, &AHREnemyCharacter::OnPawnSeen);
+
 }
 
+
+void AHREnemyCharacter::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+
+}
 
 // When the enemy pawns catch a player in the eyesight, set the TargetActor to it and try to attack.
 void AHREnemyCharacter::OnPawnSeen(APawn* Pawn)
@@ -55,3 +66,37 @@ void AHREnemyCharacter::OnPawnSeen(APawn* Pawn)
 		DrawDebugString(GetWorld(), GetActorLocation(), "PLAYER SPOTTED", nullptr, FColor::White, 4.0f, true);
 	}
 }
+
+
+void AHREnemyCharacter::OnHealthChanged(AActor* InstigatorActor, UAbilitySystemComponent* OwnerComp, float NewValue)
+{
+	if (NewValue <= 0.f)
+	{
+		Die();
+	}
+}
+
+
+void AHREnemyCharacter::Die()
+{
+
+	AAIController* AIController = Cast<AAIController>(GetController());
+	if (ensure(AIController))
+	{
+		// Stop behavior tree
+		AIController->GetBrainComponent()->StopLogic("Killed");
+
+	}
+
+	// Ragdoll
+	GetMesh()->SetCollisionProfileName("Ragdoll");
+	GetMesh()->SetAllBodiesSimulatePhysics(true);
+
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	GetCharacterMovement()->DisableMovement();
+
+	// Clean up
+	SetLifeSpan(5.0f);
+}
+
+

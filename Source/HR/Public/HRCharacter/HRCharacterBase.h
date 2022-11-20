@@ -10,6 +10,7 @@
 #include "AbilitySystemInterface.h"
 #include "HRAbility/HRAbilitySystemComponent.h"
 #include "HRAbility/HRGameplayAbility.h"
+#include <GameplayEffectTypes.h>
 #include "HRCharacterBase.generated.h"
 
 
@@ -39,14 +40,6 @@ public:
 	AHRCharacterBase();
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const;
 	virtual void PossessedBy(AController* NewController) override;
-
-	/** 仅声明，应在蓝图中实现 */
-	UFUNCTION(BlueprintImplementableEvent, Category = "AbilitySystem")
-	void Die();
-
-	/** 仅声明，应在蓝图中实现 */
-	UFUNCTION(BlueprintImplementableEvent, Category = "AbilitySystem")
-	void HealthChange();
 
 	/** 添加能力 */
 	UFUNCTION(BlueprintCallable, Category = "AbilitySystem")

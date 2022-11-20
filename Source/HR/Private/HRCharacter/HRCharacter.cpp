@@ -8,7 +8,7 @@
 #include "Components/InputComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 
-// Sets default values
+
 AHRCharacter::AHRCharacter()
 {
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
@@ -41,6 +41,26 @@ AHRCharacter::AHRCharacter()
 	LockViewComp = CreateDefaultSubobject<UHRLockViewComponent>(TEXT("LockViewComp"));
 
 	ExtraAttributeSet = CreateDefaultSubobject<UHRExtraAttributeSet>(TEXT("ExtraAttributeSet"));
+}
+
+void AHRCharacter::OnHealthChanged(AActor* InstigatorActor, UAbilitySystemComponent* OwnerComp, float NewValue)
+{
+
+}
+
+void AHRCharacter::OnStaminaChanged(AActor* InstigatorActor, UAbilitySystemComponent* OwnerComp, float NewValue)
+{
+
+}
+
+void AHRCharacter::OnManaChanged(AActor* InstigatorActor, UAbilitySystemComponent* OwnerComp, float NewValue)
+{
+
+}
+
+void AHRCharacter::Die()
+{
+
 }
 
 void AHRCharacter::MoveForward(float Value)
@@ -81,21 +101,21 @@ void AHRCharacter::LookUp(float Value)
 	}
 }
 
-// Called when the game starts or when spawned
+
 void AHRCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
 }
 
-// Called every frame
+
 void AHRCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
 }
 
-// Called to bind functionality to input
+
 void AHRCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
@@ -111,5 +131,11 @@ void AHRCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	
 	PlayerInputComponent->BindAxis("Turn Right / Left Mouse", this, &AHRCharacter::TurnRight);
 	PlayerInputComponent->BindAxis("Look Up / Down Mouse", this, &AHRCharacter::LookUp);
+}
+
+void AHRCharacter::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+
 }
 

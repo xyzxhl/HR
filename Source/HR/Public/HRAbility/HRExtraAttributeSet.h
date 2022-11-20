@@ -12,6 +12,9 @@
 	GAMEPLAYATTRIBUTE_VALUE_SETTER(PropertyName) \
 	GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnStaminaChanged, AActor*, Instigator, UAbilitySystemComponent*, OwnerComp, float, NewValue);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnManaChanged, AActor*, Instigator, UAbilitySystemComponent*, OwnerComp, float, NewValue);
+
 UCLASS()
 class HR_API UHRExtraAttributeSet : public UHRAttributeSet
 {
@@ -51,4 +54,10 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Resource")
 	FGameplayAttributeData InitialMana;
 	ATTRIBUTE_ACCESSORS(UHRExtraAttributeSet, InitialMana);
+
+	UPROPERTY(BlueprintAssignable)
+	FOnStaminaChanged OnStaminaChanged;
+
+	UPROPERTY(BlueprintAssignable)
+	FOnManaChanged OnManaChanged;
 };

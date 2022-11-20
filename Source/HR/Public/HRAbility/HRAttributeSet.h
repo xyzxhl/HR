@@ -17,6 +17,9 @@
 	GAMEPLAYATTRIBUTE_VALUE_SETTER(PropertyName) \
 	GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnHealthChanged, AActor*, Instigator, UAbilitySystemComponent*, OwnerComp, float, NewValue);
+
+
 UCLASS()
 class HR_API UHRAttributeSet : public UAttributeSet
 {
@@ -71,6 +74,11 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Damage")
 	FGameplayAttributeData Damage;
 	ATTRIBUTE_ACCESSORS(UHRAttributeSet, Damage);
+
+	UPROPERTY(BlueprintAssignable)
+	FOnHealthChanged OnHealthChanged;
+
+
 
 protected:
 	/** 用于处理最大值变化，百分比缩放当前值 */

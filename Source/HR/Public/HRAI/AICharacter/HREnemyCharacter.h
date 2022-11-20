@@ -4,11 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "HRCharacter/HRCharacterBase.h"
+#include <GameplayEffectTypes.h>
 #include "HREnemyCharacter.generated.h"
 
 class UPawnSensingComponent;
 class UHRWorldUserWidget;
 class UUserWidget;
+class UHRAttributeSet;
 
 UCLASS()
 class HR_API AHREnemyCharacter : public AHRCharacterBase
@@ -17,7 +19,7 @@ class HR_API AHREnemyCharacter : public AHRCharacterBase
 
 public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AbilitySystem")
-		class UHRAttributeSet* AttributeSet;
+	UHRAttributeSet* AttributeSet;
 
 public:
 	AHREnemyCharacter();
@@ -27,19 +29,26 @@ protected:
 	UHRWorldUserWidget* ActiveHealthBar;
 
 	UPROPERTY(VisibleAnywhere, Category = "Effects")
-		FName TimeToHit;
+	FName TimeToHit;
 
 	UPROPERTY(EditDefaultsOnly, Category = "UI")
-		TSubclassOf<UUserWidget> HealthBarWidgetClass;
+	TSubclassOf<UUserWidget> HealthBarWidgetClass;
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
-		UPawnSensingComponent* PawnSensingComp;
+	UPawnSensingComponent* PawnSensingComp;
+
+	UFUNCTION()
+	void Die();
+
+	UFUNCTION()
+	void OnHealthChanged(AActor* InstigatorActor, UAbilitySystemComponent* OwnerComp, float NewValue);
+
+	UFUNCTION()
+	void OnPawnSeen(APawn* Pawn);
 
 	virtual void Tick(float DeltaSeconds) override;
 
 	virtual void PostInitializeComponents() override;
 
-
-	UFUNCTION()
-		void OnPawnSeen(APawn* Pawn);
+	virtual void BeginPlay() override;
 };

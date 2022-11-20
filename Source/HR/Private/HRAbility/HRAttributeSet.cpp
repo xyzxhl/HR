@@ -27,19 +27,18 @@ void UHRAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, fl
 void UHRAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data)
 {
 	AActor* TargetActor = Data.Target.AbilityActorInfo->AvatarActor.Get();
-	if (TargetActor->GetClass()->IsChildOf(AHRCharacterBase::StaticClass())) {
+	if (TargetActor->GetClass()->IsChildOf(AHRCharacterBase::StaticClass())) 
+	{
 		AHRCharacterBase* TargetCharacter = Cast<AHRCharacterBase>(TargetActor);
 
-		if (Data.EvaluatedData.Attribute == GetHealthAttribute()) {
-			if (GetHealth() <= 0.0f) {
-				TargetCharacter->Die();
-			}
-
+		if (Data.EvaluatedData.Attribute == GetHealthAttribute()) 
+		{
 			SetHealth(FMath::Clamp(GetHealth(), 0.0f, GetMaxHealth()));
-			
-			TargetCharacter->HealthChange();
+
+			OnHealthChanged.Broadcast(nullptr, TargetCharacter->GetAbilitySystemComponent(), GetHealth());
 		}
-		else if (Data.EvaluatedData.Attribute == GetMoveSpeedAttribute()) {
+		else if (Data.EvaluatedData.Attribute == GetMoveSpeedAttribute()) 
+		{
 			SetMoveSpeed(FMath::Clamp(GetMoveSpeed(), 1.0f, 1.3f));
 
 			TargetCharacter->GetCharacterMovement()->MaxWalkSpeed = GetMoveSpeed() * TargetCharacter->BaseSpeed;

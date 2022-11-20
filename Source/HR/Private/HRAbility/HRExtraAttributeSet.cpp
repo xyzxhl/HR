@@ -34,18 +34,19 @@ void UHRExtraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCal
 	Super::PostGameplayEffectExecute(Data);
 
 	AActor* TargetActor = Data.Target.AbilityActorInfo->AvatarActor.Get();
-	if (TargetActor->GetClass()->IsChildOf(AHRCharacter::StaticClass())) {
+	if (TargetActor->GetClass()->IsChildOf(AHRCharacter::StaticClass())) 
+	{
 		AHRCharacter* TargetCharacter = Cast<AHRCharacter>(TargetActor);
 
-		if (Data.EvaluatedData.Attribute == GetStaminaAttribute()) {
+		if (Data.EvaluatedData.Attribute == GetStaminaAttribute()) 
+		{
 			SetStamina(FMath::Clamp(GetStamina(), 0.0f, GetMaxStamina()));
-
-			TargetCharacter->StaminaChange();
+			OnStaminaChanged.Broadcast(nullptr, TargetCharacter->GetAbilitySystemComponent(), GetStamina());
 		}
-		else if (Data.EvaluatedData.Attribute == GetManaAttribute()) {
+		else if (Data.EvaluatedData.Attribute == GetManaAttribute()) 
+		{
 			SetMana(FMath::Clamp(GetMana(), 0.0f, GetMaxMana()));
-
-			TargetCharacter->ManaChange();
+			OnManaChanged.Broadcast(nullptr, TargetCharacter->GetAbilitySystemComponent(), GetMana());
 		}
 	}
 }
