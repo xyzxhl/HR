@@ -6,7 +6,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 
 UHRAttributeSet::UHRAttributeSet()
-    : Health(100.0f)
+    : Health(100.f)
 	, MaxHealth(100.0f)
 	, AttackPower(1.0f)
     , DefensePower(1.0f)
