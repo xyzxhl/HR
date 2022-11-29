@@ -16,8 +16,5 @@ class HR_API UHRGameInstance : public UGameInstance
 	
 public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	FString SlotName;
-
-	UPROPERTY()
-	FString test;
+	FString SlotN;
 };

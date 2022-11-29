@@ -5,13 +5,13 @@
 #include "HRCharacter/HRCharacter.h"
 
 UHRExtraAttributeSet::UHRExtraAttributeSet()
-    : Stamina(100.f)
+    : Stamina(100.0f)
 	, MaxStamina(100.0f)
 	, StaminaRecoveryRate(40.0f)
-    , Mana(0.f)
+    , Mana(0.0f)
     , MaxMana(100.0f)
 	, ManaRecoveryRate(1.0f)
-    , InitialMana(0.f)
+    , InitialMana(0.0f)
 {
 }
 

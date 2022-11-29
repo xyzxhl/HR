@@ -29,9 +29,9 @@ AHRGameModeBase::AHRGameModeBase()
 	UHRGameInstance* GI =Cast<UHRGameInstance>(UGameplayStatics::GetGameInstance(this));
 	if (GI)
 	{
-		if (!GI->SlotName.IsEmpty())
+		if (!GI->SlotN.IsEmpty())
 		{
-			SlotName = GI->SlotName;
+			SlotName = GI->SlotN;
 		}
 		else
 		{
