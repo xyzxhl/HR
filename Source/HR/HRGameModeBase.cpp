@@ -18,7 +18,7 @@
 AHRGameModeBase::AHRGameModeBase()
 {
 	// set default pawn class to our Blueprinted character
-	static ConstructorHelpers::FClassFinder<APawn> PlayerPawnBPClass(TEXT("/Game/HRCharacter/BP_HRCharacter"));
+	static ConstructorHelpers::FClassFinder<APawn> PlayerPawnBPClass(TEXT("/HRCharacter/BP_HRCharacter"));
 	if (ensure(PlayerPawnBPClass.Class))
 	{
 		DefaultPawnClass = PlayerPawnBPClass.Class;
