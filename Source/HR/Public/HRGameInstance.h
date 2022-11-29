@@ -14,10 +14,4 @@ class HR_API UHRGameInstance : public UGameInstance
 {
 	GENERATED_BODY()
 	
-public:
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	FString SlotName;
-
-	UPROPERTY()
-	FString test;
 };
