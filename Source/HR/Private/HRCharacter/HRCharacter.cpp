@@ -7,6 +7,7 @@
 #include "Camera/CameraComponent.h"
 #include "Components/InputComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "HRCharacter/HRSaveGame.h"
 
 
 AHRCharacter::AHRCharacter()
@@ -128,7 +129,7 @@ void AHRCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 
 	PlayerInputComponent->BindAxis("Move Forward / Backward", this, &AHRCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("Move Right / Left", this, &AHRCharacter::MoveRight);
-	
+
 	PlayerInputComponent->BindAxis("Turn Right / Left Mouse", this, &AHRCharacter::TurnRight);
 	PlayerInputComponent->BindAxis("Look Up / Down Mouse", this, &AHRCharacter::LookUp);
 }
@@ -139,3 +140,18 @@ void AHRCharacter::PostInitializeComponents()
 
 }
 
+void AHRCharacter::SaveCharacter(UHRSaveGame* SaveObject)
+{
+	if (SaveObject)
+	{
+		SaveObject->PlayerTransform = GetActorTransform();
+	}
+}
+
+void AHRCharacter::LoadCharacter(UHRSaveGame* LoadObject)
+{
+	if (LoadObject)
+	{
+		SetActorTransform(LoadObject->PlayerTransform);
+	}
+}

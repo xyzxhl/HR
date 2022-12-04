@@ -14,4 +14,7 @@ class HR_API UHRGameInstance : public UGameInstance
 {
 	GENERATED_BODY()
 	
+public:
+	UPROPERTY(BlueprintReadWrite, Category = "SaveGame")
+	FString SlotName;
 };

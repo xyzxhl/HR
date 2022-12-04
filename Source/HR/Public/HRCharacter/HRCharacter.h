@@ -6,6 +6,8 @@
 #include "HRCharacter/HRCharacterBase.h"
 #include "HRCharacter.generated.h"
 
+class UHRSaveGame;
+
 UCLASS()
 class HR_API AHRCharacter : public AHRCharacterBase
 {
@@ -66,4 +68,6 @@ public:
 
 	virtual void PostInitializeComponents() override;
 
+	void SaveCharacter(UHRSaveGame* SaveObject);
+	void LoadCharacter(UHRSaveGame* LoadObject);
 };

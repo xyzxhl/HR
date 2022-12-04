@@ -7,6 +7,10 @@
 #include <GameFramework/GameModeBase.h>
 #include "HRAbility/HRAbilitySystemComponent.h"
 #include <DrawDebugHelpers.h>
+#include "HRCharacter/HRCharacter.h"
+#include <Kismet/GameplayStatics.h>
+#include "HRGameInstance.h"
+#include "HRCharacter/HRSaveGame.h"
 
 
 
@@ -32,6 +36,68 @@ void AHRGameModeBase::StartPlay()
 	// Actual amount of bots and whether its allowed to spawn logic later in the chain...
 	GetWorldTimerManager().SetTimer(TimerHandle_BasicSpawnbots, this, &AHRGameModeBase::BasicSpawnBotTimerElapsed, BasicEnemySpawnTimerInterval, true);
 }
+
+
+void AHRGameModeBase::InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage)
+{
+	Super::InitGame(MapName, Options, ErrorMessage);
+
+	UHRGameInstance* GI = Cast<UHRGameInstance>(GetGameInstance());
+
+	if (ensure(GI))
+	{
+		if (!(GI->SlotName.IsEmpty()))
+		{
+			SlotName = GI->SlotName;
+		}
+		else
+		{
+			SlotName = "Save01";
+		}
+	}
+
+	LoadSaveGame();
+}
+
+
+void AHRGameModeBase::HandleStartingNewPlayer_Implementation(APlayerController* NewPlayer)
+{
+	Super::HandleStartingNewPlayer_Implementation(NewPlayer);
+
+	AHRCharacter* HRChar = Cast<AHRCharacter>(NewPlayer->GetPawn());
+	if (HRChar)
+	{
+		HRChar->LoadCharacter(CurrentSaveGame);
+	}
+}
+
+
+void AHRGameModeBase::WriteSaveGame(FString NameofSlot)
+{
+	AHRCharacter* HRChar = Cast<AHRCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn());
+	if (HRChar)
+	{
+		HRChar->SaveCharacter(CurrentSaveGame);
+	}
+
+	UGameplayStatics::SaveGameToSlot(CurrentSaveGame, NameofSlot, 0);
+}
+
+
+void AHRGameModeBase::LoadSaveGame()
+{
+	if (UGameplayStatics::DoesSaveGameExist(SlotName, 0))
+	{
+		UE_LOG(LogTemp, Log, TEXT("Load game from slot."));
+		CurrentSaveGame = Cast<UHRSaveGame>(UGameplayStatics::LoadGameFromSlot(SlotName, 0));
+	}
+	else
+	{
+		UE_LOG(LogTemp, Log, TEXT("Create new game."));
+		CurrentSaveGame = Cast<UHRSaveGame>(UGameplayStatics::CreateSaveGameObject(UHRSaveGame::StaticClass()));
+	}
+}
+
 
 void AHRGameModeBase::BasicSpawnBotTimerElapsed()
 {

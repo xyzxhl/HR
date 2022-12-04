@@ -7,46 +7,59 @@
 #include <AIModule/Classes/EnvironmentQuery/EnvQueryTypes.h>
 #include "HRGameModeBase.generated.h"
 
+
 class UEnvQuery;
 class UCurveFloat;
+class UHRSaveGame;
 
-/**
- *
- */
+
+
 UCLASS()
 class HR_API AHRGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
 
+
+protected:
+	UPROPERTY()
+	UHRSaveGame* CurrentSaveGame;
+
+	FString SlotName;
+
+	UPROPERTY(EditDefaultsOnly, Category = "EnemySpawn")
+	TSubclassOf<AActor> MinionClass;
+
+	UPROPERTY(EditDefaultsOnly, Category = "EnemySpawn")
+	UEnvQuery* SpawnBotQuery;
+
+	UPROPERTY(EditDefaultsOnly, Category = "EnemySpawn")
+	UCurveFloat* DifficultyCurve;
+
+	UPROPERTY(EditDefaultsOnly, Category = "EnemySpawn")
+	float BasicEnemySpawnTimerInterval;
+
+	FTimerHandle TimerHandle_BasicSpawnbots;
+
+	UFUNCTION()
+	void BasicSpawnBotTimerElapsed();
+
+	UFUNCTION()
+	void OnQueryCompleted(UEnvQueryInstanceBlueprintWrapper* QueryInstance, EEnvQueryStatus::Type QueryStatus);
+
+protected:
+	UFUNCTION(Exec)
+	void DamageAll();
 public:
 	AHRGameModeBase();
 
 	virtual void StartPlay() override;
 
-protected:
+	virtual void InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage) override;
 
-	UPROPERTY(EditDefaultsOnly, Category = "EnemySpawn")
-		TSubclassOf<AActor> MinionClass;
+	void HandleStartingNewPlayer_Implementation(APlayerController* NewPlayer) override;
 
-	UPROPERTY(EditDefaultsOnly, Category = "EnemySpawn")
-		UEnvQuery* SpawnBotQuery;
+	UFUNCTION(BlueprintCallable)
+	void WriteSaveGame(FString NameofSlot);
 
-	UPROPERTY(EditDefaultsOnly, Category = "EnemySpawn")
-		UCurveFloat* DifficultyCurve;
-
-	UPROPERTY(EditDefaultsOnly, Category = "EnemySpawn")
-		float BasicEnemySpawnTimerInterval;
-
-	FTimerHandle TimerHandle_BasicSpawnbots;
-
-	UFUNCTION()
-		void BasicSpawnBotTimerElapsed();
-
-	UFUNCTION()
-		void OnQueryCompleted(UEnvQueryInstanceBlueprintWrapper* QueryInstance, EEnvQueryStatus::Type QueryStatus);
-
-protected:
-	
-	UFUNCTION(Exec)
-		void DamageAll();
+	void LoadSaveGame();
 };
