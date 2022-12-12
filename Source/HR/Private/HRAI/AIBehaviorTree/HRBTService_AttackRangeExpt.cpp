@@ -16,12 +16,13 @@ void UHRBTService_AttackRangeExpt::TickNode(UBehaviorTreeComponent& OwnerComp, u
 		if (TargetActor)
 		{
 			AAIController* AIC = OwnerComp.GetAIOwner();
-
 			if (ensure(AIC))
 			{
 				APawn* AIPawn = AIC->GetPawn();
 				if (ensure(AIPawn))
 				{
+					// Check if the player is in the attack range of the enemy. If yes, return true.
+
 					float DistanceOfActor = FVector::Distance(TargetActor->GetActorLocation(), AIPawn->GetActorLocation());
 					bool bWithinAttackRange = DistanceOfActor < AttackDistance;
 
