@@ -15,6 +15,7 @@
 
 AHREnemyCharacter::AHREnemyCharacter()
 {
+	/* 给敌人角色赋予AI控制器，属性集和玩家感知系统 */
 	PawnSensingComp = CreateDefaultSubobject<UPawnSensingComponent>("PawnSensingComp");
 
 	AttributeSet = CreateDefaultSubobject<UHRAttributeSet>(TEXT("AttributeSet"));
@@ -27,6 +28,7 @@ void AHREnemyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
+	/* 创建血条组件 */
 	if (ActiveHealthBar == nullptr)
 	{
 		ActiveHealthBar = CreateWidget<UHRWorldUserWidget>(GetWorld(), HealthBarWidgetClass);
@@ -42,8 +44,8 @@ void AHREnemyCharacter::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 
+	/* 给感知组件增加委托：一旦视野中发现敌人，则执行OnPawnSeen函数 */
 	PawnSensingComp->OnSeePawn.AddDynamic(this, &AHREnemyCharacter::OnPawnSeen);
-
 }
 
 
@@ -54,6 +56,7 @@ void AHREnemyCharacter::Tick(float DeltaSeconds)
 }
 
 // When the enemy pawns catch a player in the eyesight, set the TargetActor to it and try to attack.
+/* 当敌人发现一个玩家，将行为树中的TargetActor设为他并尝试去攻击 */
 void AHREnemyCharacter::OnPawnSeen(APawn* Pawn)
 {
 	AAIController* AIController = Cast<AAIController>(GetController());
@@ -70,6 +73,7 @@ void AHREnemyCharacter::OnPawnSeen(APawn* Pawn)
 
 void AHREnemyCharacter::OnHealthChanged(AActor* InstigatorActor, UAbilitySystemComponent* OwnerComp, float NewValue)
 {
+	// If health is lower than zero, trigger die event.
 	if (NewValue <= 0.f)
 	{
 		Die();
@@ -79,7 +83,6 @@ void AHREnemyCharacter::OnHealthChanged(AActor* InstigatorActor, UAbilitySystemC
 
 void AHREnemyCharacter::Die()
 {
-
 	AAIController* AIController = Cast<AAIController>(GetController());
 	if (ensure(AIController))
 	{

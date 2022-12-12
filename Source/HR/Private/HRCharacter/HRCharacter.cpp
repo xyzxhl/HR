@@ -44,6 +44,7 @@ AHRCharacter::AHRCharacter()
 	ExtraAttributeSet = CreateDefaultSubobject<UHRExtraAttributeSet>(TEXT("ExtraAttributeSet"));
 }
 
+/* 待扩展，属性值改变事件的触发 */
 void AHRCharacter::OnHealthChanged(AActor* InstigatorActor, UAbilitySystemComponent* OwnerComp, float NewValue)
 {
 

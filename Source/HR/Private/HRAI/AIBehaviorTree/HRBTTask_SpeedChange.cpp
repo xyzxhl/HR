@@ -19,6 +19,7 @@ EBTNodeResult::Type UHRBTTask_SpeedChange::ExecuteTask(UBehaviorTreeComponent& O
 			UCharacterMovementComponent* CMC = Cast<UCharacterMovementComponent>(AICharacter->GetComponentByClass(UCharacterMovementComponent::StaticClass()));
 			if (ensure(CMC))
 			{
+				// Switch enemy's speed.
 				if (BBC->GetValueAsBool(SpeedKey.SelectedKeyName))
 				{
 					CMC->MaxWalkSpeed = 400;

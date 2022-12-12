@@ -12,7 +12,7 @@ void UHRWorldUserWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTi
 	Super::NativeTick(MyGeometry, InDeltaTime);
 
 	// Project enemy's world location to viewport.
-
+	/* 将敌人在世界中的位置投影到屏幕上 */
 	if (!IsValid(ActorToAttach))
 	{
 		RemoveFromParent();

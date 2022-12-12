@@ -32,8 +32,7 @@ void AHRGameModeBase::StartPlay()
 {
 	Super::StartPlay();
 
-	// Continuous timer to spawn in more bots.
-	// Actual amount of bots and whether its allowed to spawn logic later in the chain...
+	/* 设置循环定时器，用以生成敌人 */
 	GetWorldTimerManager().SetTimer(TimerHandle_BasicSpawnbots, this, &AHRGameModeBase::BasicSpawnBotTimerElapsed, BasicEnemySpawnTimerInterval, true);
 }
 
@@ -42,6 +41,8 @@ void AHRGameModeBase::InitGame(const FString& MapName, const FString& Options, F
 {
 	Super::InitGame(MapName, Options, ErrorMessage);
 
+
+	/* 用存档中的内容初始化游戏数据。自动读取自动存档内容。若自动存档为空，则创建新存档。 */
 	UHRGameInstance* GI = Cast<UHRGameInstance>(GetGameInstance());
 
 	if (ensure(GI))
@@ -64,6 +65,7 @@ void AHRGameModeBase::HandleStartingNewPlayer_Implementation(APlayerController* 
 {
 	Super::HandleStartingNewPlayer_Implementation(NewPlayer);
 
+	/* 初始化新玩家 */
 	AHRCharacter* HRChar = Cast<AHRCharacter>(NewPlayer->GetPawn());
 	if (HRChar)
 	{
@@ -74,6 +76,8 @@ void AHRGameModeBase::HandleStartingNewPlayer_Implementation(APlayerController* 
 
 void AHRGameModeBase::WriteSaveGame(FString NameofSlot)
 {
+
+	/* 没用的废物。本意是用这个来写存档，但一旦在蓝图中调用这个函数UE编辑器就会崩溃 */
 	AHRCharacter* HRChar = Cast<AHRCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn());
 	if (HRChar)
 	{
@@ -86,11 +90,14 @@ void AHRGameModeBase::WriteSaveGame(FString NameofSlot)
 
 void AHRGameModeBase::LoadSaveGame()
 {
+
+	/* 读取存档 */
 	if (UGameplayStatics::DoesSaveGameExist(SlotName, 0))
 	{
 		UE_LOG(LogTemp, Log, TEXT("Load game from slot."));
 		CurrentSaveGame = Cast<UHRSaveGame>(UGameplayStatics::LoadGameFromSlot(SlotName, 0));
 	}
+	/* 存档为空，开始新游戏 */
 	else
 	{
 		UE_LOG(LogTemp, Log, TEXT("Create new game."));
@@ -101,6 +108,7 @@ void AHRGameModeBase::LoadSaveGame()
 
 void AHRGameModeBase::BasicSpawnBotTimerElapsed()
 {
+	/* 给当前世界中存活的敌人计数 */
 	int32 NumofAliveBots = 0;
 	for (TActorIterator<AHREnemyCharacter> It(GetWorld()); It; ++It)
 	{
@@ -114,6 +122,7 @@ void AHRGameModeBase::BasicSpawnBotTimerElapsed()
 
 	UE_LOG(LogTemp, Log, TEXT("Found %i enemys"), NumofAliveBots);
 
+	/* 用曲线给最大敌人数赋值，当存活敌人数量大于最大值则停止生成 */
 	float MaxBotCount = 5.0f;
 	if (DifficultyCurve)
 	{
@@ -126,6 +135,7 @@ void AHRGameModeBase::BasicSpawnBotTimerElapsed()
 		return;
 	}
 
+	/* 敌人数量正确，开始运行EQS生成敌人 */
 	UEnvQueryInstanceBlueprintWrapper* QueryInstance = UEnvQueryManager::RunEQSQuery(this, SpawnBotQuery, this, EEnvQueryRunMode::RandomBest5Pct, nullptr);
 	if (ensure(QueryInstance))
 	{
@@ -141,6 +151,7 @@ void AHRGameModeBase::OnQueryCompleted(UEnvQueryInstanceBlueprintWrapper* QueryI
 		return;
 	}
 
+	/* 在玩家附近生成敌人，详见蓝图 */
 	TArray<FVector> Locations = QueryInstance->GetResultsAsLocations();
 
 	if (Locations.IsValidIndex(0))
@@ -154,6 +165,7 @@ void AHRGameModeBase::OnQueryCompleted(UEnvQueryInstanceBlueprintWrapper* QueryI
 
 void AHRGameModeBase::DamageAll()
 {
+	/* 后期开发可能用到的Debug道具 */
 	for (TActorIterator<AHREnemyCharacter> It(GetWorld()); It; ++It)
 	{
 		AHREnemyCharacter* Bot = *It;

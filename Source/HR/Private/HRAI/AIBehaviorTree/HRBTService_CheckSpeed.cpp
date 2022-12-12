@@ -18,6 +18,7 @@ void UHRBTService_CheckSpeed::TickNode(UBehaviorTreeComponent& OwnerComp, uint8*
 		ACharacter* AIPawn = AIC->GetCharacter();
 		if (ensure(AIPawn))
 		{
+			// Check the speed of a particular enemy. If it is 800 cm/s, return true. Else return false.
 			UCharacterMovementComponent* CMC = Cast<UCharacterMovementComponent>(AIPawn->GetComponentByClass(UCharacterMovementComponent::StaticClass()));
 			bool bFast = CMC->MaxWalkSpeed == 800;
 			BBC->SetValueAsBool(SpeedCheckKey.SelectedKeyName, bFast);
